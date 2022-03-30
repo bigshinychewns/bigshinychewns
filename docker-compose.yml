@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    command: bash -c 'pnpm install && pnpm run dev -- --open --host'
+    ports:
+      - '3000:3000'
+    working_dir: '/bigshinychewns'
+    expose:
+      - '3000'
+    volumes:
+      - '.:/bigshinychewns'
+      - node_modules:/bigshinychewns/node_modules
+      - pnpm-store:/bigshinychewns/.pnpm-store
+    environment:
+      - VITE_ENVIRONMENT=development
+    restart: on-failure
+volumes:
+  node_modules:
+  pnpm-store:
