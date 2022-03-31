@@ -4,11 +4,13 @@
   import AbcPreview from '$lib/components/AbcPreview.svelte';
   import Spinner from './Spinner.svelte';
   import AbcExpanded from './AbcExpanded.svelte';
+  import AbcEditor from './AbcEditor.svelte';
 
   const nonSearchingStates = ['parseAbcForExpanded', 'expandedTune'];
   const previewSpinnerStates = ['awaitTuneAbc', 'parseAbcForPreview'];
   const previewStates = ['previewTune', 'parseAbcForPreview'];
-  const expandedStates = ['parseAbcForExpanded', 'expandedTune'];
+  const expandedStates = ['parseAbcForExpanded', 'expandedTune', 'abcEditor'];
+  const abcExpandedStates = ['parseAbcForExpanded', 'expandedTune'];
 </script>
 
 <style>
@@ -53,15 +55,17 @@
 {:else}
   <section class="full">
     <div class="expanded-container">
-      {#if $fsm === 'parseAbcForExpanded'}
-        <Spinner
-          backgroundColor='var(--darkest)'
-          color='var(--light)'
-          width='594px'
-        />
-      {/if}
-      {#if $fsm == 'abcEditor'}
+      {#if abcExpandedStates.includes($fsm)}
+        {#if $fsm === 'parseAbcForExpanded'}
+          <Spinner
+            backgroundColor='var(--darkest)'
+            color='var(--light)'
+            width='594px'
+          />
+        {/if}
         <AbcExpanded />
+      {:else}
+        <AbcEditor />
       {/if}
     </div>
   </section>

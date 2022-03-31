@@ -7,6 +7,7 @@
   import PlayPauseButton from './PlayPauseButton.svelte';
   import AbcjsTempoControl from './AbcjsTempoControl.svelte'
   import EditAbcButton from "./EditAbcButton.svelte";
+  import RewindButton from "./RewindButton.svelte";
 
   let abcjsVisualObj,
     audioContext,
@@ -68,7 +69,7 @@
     if (synthControl) {
       synthControl.disable(true);
     }
-// Q:1/2=60\r\n
+    // Q:1/2=60\r\n
     abcjsVisualObj = abcjs.renderAbc(
       renderArea, `${$tuneAbc}`, abcRenderOptions
     )[0];
@@ -94,17 +95,24 @@
     synth
       .init(audioParams)
       .then((_response) => {
+        console.log('init complete...');
         if (synthControl) {
-          synthControl.setTune(abcjsVisualObj, true, audioParams)
-            .catch((error) => console.warn('Audio error:', error));
+          console.log('found synthcontrol');
+          synthControl
+            .setTune(abcjsVisualObj, true, audioParams)
+              .then(() => {
+                console.log('begin priming synth...');
+                return synth.prime();
+              })
+              .then(() => {
+                fsm.parseAbcSuccess()
+                return Promise.resolve();
+              });
+        } else {
+          console.log('no synth control??');
         }
       })
-      .then(() => synth.prime())
-      .then(() => {
-        fsm.parseAbcSuccess()
-        return Promise.resolve();
-      })
-      .catch((error) => console.warn('Synth Error:', error))
+      .catch((error) => console.warn('Audio error:', error))
       .finally(() => parsing = false);
   };
 
@@ -122,7 +130,13 @@
     playing = false;
   };
 
-  const handleClick = () => playing ? handlePause() : handlePlay();
+  const handleRewind = () => {
+    if (synthControl) {
+      synthControl.restart();
+    }
+  }
+
+  const togglePlayPause = () => playing ? handlePause() : handlePlay();
 
   // const handleTempoChange = (newTempo) {
 
@@ -154,7 +168,7 @@
     grid-template-columns: repeat(9, 50px);
     place-items: center;
   }
-  .parsing {
+  .hide {
     display: none;
   }
   .fake-controls {
@@ -169,24 +183,30 @@
   .edit-abc-container {
     grid-area:1 / 1 / 1 / 1;
   }
+  .rewind-container {
+    grid-area: 1 / 3 / 1 / 3;
+  }
 </style>
 
 <svelte:head>
   <link href="/styles/abcjs.css" rel="stylesheet">
 </svelte:head>
 
-<section class="expanded-abc" class:parsing>
+<section class="expanded-abc" class:hide={parsing || $fsm == 'abcEditor'}>
   <div id="renderArea" bind:this={renderArea}/>
   <div class="fake-controls" />
   <div class="controls">
+    <div class="edit-abc-container">
+      <EditAbcButton />
+    </div>
+    <div class="rewind-container">
+      <RewindButton onClick={handleRewind}/>
+    </div>
     <div class="play-pause-container">
-      <PlayPauseButton {handleClick} {playing} />
+      <PlayPauseButton handleClick={togglePlayPause} {playing} />
     </div>
     <div class="tempo-control-container">
       <AbcjsTempoControl bind:value={tempoPercent} />
     </div>
-    <div class="edit-abc-container">
-      <EditAbcButton />
-    </div>
-</div>
+  </div>
 </section>

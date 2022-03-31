@@ -146,7 +146,7 @@ const fsm = svelteFsm('start', {
       tuneAbc.set(newTuneAbc);
       return 'parseAbcForExpanded';
     },
-    back: 'expandedTune'
+    back: 'parseAbcForExpanded'
   }
 });
 
