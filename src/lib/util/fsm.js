@@ -15,13 +15,18 @@ import {
   tuneVersionIndex
 } from '$lib/util/stores';
 
-const searchFetchController = new AbortController();
+const emptyController = {signal: '', abort() {}}
+
+const [
+  searchFetchController,
+  versionsFetchController,
+  abcFetchController
+] = (typeof AbortController === 'undefined')
+  ? [emptyController, emptyController, emptyController]
+  : [new AbortController(), new AbortController(), new AbortController()];
+
 const searchSignal = searchFetchController.signal;
-
-const versionsFetchController = new AbortController();
-const versionsSignal = searchFetchController.signal;
-
-const abcFetchController = new AbortController();
+const versionsSignal = versionsFetchController.signal;
 const abcSignal = abcFetchController.signal;
 
 const searchAction = (query) => {
