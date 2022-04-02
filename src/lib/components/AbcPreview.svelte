@@ -111,10 +111,6 @@
     background-color: var(--light);
     place-items: center;
   }
-  button {
-    display: grid;
-    place-items: center;
-  }
   .parsing {
     display:none;
   }
