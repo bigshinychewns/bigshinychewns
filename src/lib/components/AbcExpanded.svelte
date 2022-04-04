@@ -81,6 +81,7 @@
     const textElms = renderArea.querySelectorAll(
       `text[font-family*='Times New Roman']`
     );
+
     Array.from(textElms).forEach((elm) => {
       elm.style.fontFamily = 'Copse';
     });
@@ -100,11 +101,12 @@
           console.log('found synthcontrol');
           synthControl
             .setTune(abcjsVisualObj, true, audioParams)
-              .then(() => {
-                console.log('begin priming synth...');
+              .then((arg) => {
+                console.log('return from setTune:', arg);
                 return synth.prime();
               })
-              .then(() => {
+              .then((arg) => {
+                console.log('return from prime:', arg);
                 fsm.parseAbcSuccess()
                 return Promise.resolve();
               });
@@ -160,7 +162,12 @@
     height: 474px;
   }
   #renderArea :global(.highlight) {
-    color: red;
+    --highlight-color: red;
+    color: var(--highlight-color);
+    filter: drop-shadow(0px 0px 3px var(--highlight-color));
+  }
+  #renderArea :global(g) {
+    transition: color 200ms linear, filter 200ms linear;
   }
   .controls {
     background-color: var(--light);

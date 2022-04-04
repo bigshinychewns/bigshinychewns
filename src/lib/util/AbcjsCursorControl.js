@@ -3,6 +3,7 @@ export default function AbcCursorControl(renderArea) {
   self.cursor = null;
 
   self.onStart = () => {
+    renderArea.style.scrollBehavior = 'smooth';
     const svg = renderArea.querySelector('svg');
     this.cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
     this.cursor.setAttribute("class", "abcjs-cursor");
@@ -46,5 +47,10 @@ export default function AbcCursorControl(renderArea) {
       this.cursor.setAttribute("y1", '0');
       this.cursor.setAttribute("y2", '0');
     }
-  }
+  };
+  self.lineEndAnticipation = 100;
+  self.onLineEnd = ({ milliseconds, top, bottom }) => {
+    console.log('scrolling the music...');
+    renderArea.scrollTop = top;
+  };
 }

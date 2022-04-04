@@ -41,7 +41,7 @@
     padding-right: 30px;
     display: grid;
     place-items: center;
-    grid-template-columns: 60px 315px 270px 315px 60px;
+    grid-template-columns: 60px 215px 470px 215px 60px;
     grid-template-rows: auto;
     grid-template-areas:
       "backbutton spacerleft title spacerright forwardbutton";
@@ -56,6 +56,16 @@
   h1 {
     grid-area: title;
     text-align: center;
+    font-family: 'Sherwood';
+    font-size: 2.5em;
+    color: var(--darkest);
+    -webkit-text-stroke: 0.75px var(--light);
+    text-shadow: 0.03125em 0.03125em 0 var(--darkest),
+      0.0625em 0.0625em 0 var(--dark),
+      0.09375em 0.09375em 0 var(--medium),
+      0.125em 0.125em 0 var(--light),
+      0.15625em 0.15625em 0 var(--lightest);
+
   }
   .left {
     grid-area: backbutton;
@@ -72,6 +82,12 @@
       font-weight: 500;
       src: url('/fonts/Copse-Regular.ttf') format('truetype');
     }
+    @font-face {
+      font-family: 'Sherwood';
+      font-style: normal;
+      font-weight: 500;
+      src: url('/fonts/Sherwood.ttf') format('truetype');
+    }
   </style>
 </svelte:head>
 
@@ -83,8 +99,8 @@
           <BackButton />
         {/if}
       </div>
-      <!-- <h1>YonsYams</h1> -->
-      <h1>{$fsm}</h1>
+      <h1>Big Shiny Chewns</h1>
+      <!-- <h1>{$fsm}</h1> -->
       <div class="right">
       </div>
     </nav>
