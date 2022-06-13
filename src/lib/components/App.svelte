@@ -3,7 +3,6 @@
   import BackButton from '$lib/components/BackButton.svelte';
   import fsm from '$lib/util/fsm';
 
-  $: console.log($fsm);
   const hideBackButtonStates = [
     'start',
     'displaySearchResults'

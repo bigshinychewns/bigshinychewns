@@ -1,7 +1,8 @@
 <script>
   import SearchResult from '$lib/components/SearchResult.svelte';
-  import { searchResults } from '$lib/util/stores';
   import scrollShadow from '$lib/util/scrollShadow';
+
+  export let results;
 </script>
 
 <style>
@@ -9,17 +10,17 @@
     background-color: var(--light);
     display: grid;
     overflow-y: scroll;
+    font-size: 1rem;
   }
   ul {
-    font-size: 1.5em;
     list-style-type: none;
     height: 100%;
   }
 </style>
 <section class="search-results" use:scrollShadow>
-  {#if $searchResults.tunes}
+  {#if results.tunes}
     <ul>
-      {#each $searchResults.tunes as result (result.id)}
+      {#each results.tunes as result (result.id)}
         <SearchResult {result} />
       {/each}
     </ul>

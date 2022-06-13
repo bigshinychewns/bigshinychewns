@@ -1,8 +1,14 @@
 <script>
-  import fsm from '$lib/util/fsm';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+
+  let url_path_segments = [];
+  $: url_path_segments = $page.url.pathname.split('/');
 
   const handleClick = () => {
-    fsm.back();
+    if (url_path_segments.length > 0) {
+      goto(url_path_segments.slice(0, -1).join('/'));
+    }
   }
 </script>
 

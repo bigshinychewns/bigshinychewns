@@ -1,13 +1,13 @@
 <script>
   import AbcCursorControl from "$lib/util/AbcjsCursorControl";
-  import fsm from "$lib/util/fsm";
-  import { tuneAbc } from '$lib/util/stores';
   import abcjs from 'abcjs';
   import { onMount } from 'svelte';
   import PlayPauseButton from './PlayPauseButton.svelte';
   import AbcjsTempoControl from './AbcjsTempoControl.svelte'
   import EditAbcButton from "./EditAbcButton.svelte";
   import RewindButton from "./RewindButton.svelte";
+
+  export let tuneAbc;
 
   let abcjsVisualObj,
     audioContext,
@@ -16,7 +16,7 @@
     renderArea,
     synth,
     synthControl,
-    tempoPercent;
+    tempo;
 
   const onUnmount = () => {
     const activeAudioContext = abcjs.synth.activeAudioContext();
@@ -34,7 +34,6 @@
   };
 
   onMount(() => {
-    console.log('AbcExpanded onMount');
     if (abcjs.synth.supportsAudio()) {
       audioContext = newAudioContext();
       const cursorControl = new AbcCursorControl(renderArea);
@@ -57,11 +56,6 @@
     ],
     responsive: "resize",
     add_classes: true,
-    wrap: {
-      minSpacing: 1.8,
-      maxSpacing: 2.7,
-      preferredMeasuresPerLine: 4
-    }
   };
 
   const onAudioChange = () => {
@@ -70,9 +64,11 @@
       synthControl.disable(true);
     }
     // Q:1/2=60\r\n
-    abcjsVisualObj = abcjs.renderAbc(
-      renderArea, `${$tuneAbc}`, abcRenderOptions
-    )[0];
+
+    const fuck = abcjs.renderAbc(
+      renderArea, `${tuneAbc}`, abcRenderOptions
+    );
+    abcjsVisualObj = fuck[0];
 
     console.log('miliseconds per measure', abcjsVisualObj.millisecondsPerMeasure());
     renderArea.style.removeProperty('padding-bottom');
@@ -89,7 +85,7 @@
     const audioParams = {
       audioContext: audioContext,
       visualObj: abcjsVisualObj,
-      millisecondsPerMaeasure: abcjsVisualObj.millisecondsPerMeasure()
+      qpm: tempo
     };
 
     synth = new abcjs.synth.CreateSynth();
@@ -107,7 +103,6 @@
               })
               .then((arg) => {
                 console.log('return from prime:', arg);
-                fsm.parseAbcSuccess()
                 return Promise.resolve();
               });
         } else {
@@ -140,26 +135,26 @@
 
   const togglePlayPause = () => playing ? handlePause() : handlePlay();
 
-  // const handleTempoChange = (newTempo) {
-
-  // };
-
-  // $: if (synthControl) {
-  //     synthControl.setWarp(tempoPercent);
-  //   }
+  $: if (tempo && renderArea) {
+    onAudioChange();
+  }
 </script>
 
 <style>
   section {
     display: grid;
-    grid-template-rows: 474px 60px;
-    width: 100%;
+    grid-template-rows: calc(100vh - 9em) 4em;
+    width: calc(100vw);
+    border-top: 1em solid var(--dark);
+    border-right: 1em solid var(--dark);
+    border-left: 1em solid var(--dark);
   }
   #renderArea {
     background-color: var(--darkest);
     color: var(--lightest);
     overflow-y: scroll;
-    height: 474px;
+    height: calc(100vh - 9em);
+    width: calc(100vw - 2em) !important;
   }
   #renderArea :global(.highlight) {
     --highlight-color: red;
@@ -199,7 +194,7 @@
   <link href="/styles/abcjs.css" rel="stylesheet">
 </svelte:head>
 
-<section class="expanded-abc" class:hide={parsing || $fsm == 'abcEditor'}>
+<section class="expanded-abc" class:hide={parsing}>
   <div id="renderArea" bind:this={renderArea}/>
   <div class="fake-controls" />
   <div class="controls">
@@ -213,7 +208,7 @@
       <PlayPauseButton handleClick={togglePlayPause} {playing} />
     </div>
     <div class="tempo-control-container">
-      <AbcjsTempoControl bind:value={tempoPercent} />
+      <AbcjsTempoControl bind:value={tempo} />
     </div>
   </div>
 </section>

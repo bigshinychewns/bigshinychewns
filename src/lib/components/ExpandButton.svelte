@@ -1,11 +1,3 @@
-<script>
-  import fsm from '$lib/util/fsm';
-
-  const handleClick = () => {
-    fsm.expandTune();
-  }
-</script>
-
 <style>
   section {
     display: grid;
@@ -44,7 +36,5 @@
 </style>
 
 <section class="expand-button">
-  <button on:click={handleClick}>
-    <i class="gg-arrows-expand-right" />
-  </button>
+  <i class="gg-arrows-expand-right" />
 </section>

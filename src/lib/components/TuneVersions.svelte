@@ -1,6 +1,6 @@
 <script>
   import fsm from '$lib/util/fsm';
-  import { selectedTuneVersions, selectedTuneVersion } from '$lib/util/stores';
+  import { selectedTuneVersions, selectedTuneVersion, selectedTune } from '$lib/util/stores';
   import scrollShadow from '$lib/util/scrollShadow';
 </script>
 
@@ -40,14 +40,16 @@
   <ul>
     {#each $selectedTuneVersions as tuneVersion, index (tuneVersion.id)}
       <li class:selected={$selectedTuneVersion?.id === tuneVersion.id}>
-        <button on:click={() => fsm.selectTuneVersion(tuneVersion, index + 1)}>
-          <span>
-            {`${index + 1}: ${tuneVersion.key.substring(0,4)}`}
-          </span>
-          <span class="muted">
-            {`${tuneVersion.id}`}
-          </span>
-        </button>
+        <a href={`/${tuneVersion.id}`}>
+          <!-- <button on:click={() => fsm.selectTuneVersion(tuneVersion, index + 1)}> -->
+            <span>
+              {`${index + 1}: ${tuneVersion.key.substring(0,4)}`}
+            </span>
+            <span class="muted">
+              {`${tuneVersion.id}`}
+            </span>
+          <!-- </button> -->
+        </a>
       </li>
     {/each}
   </ul>

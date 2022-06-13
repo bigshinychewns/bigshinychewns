@@ -116,7 +116,6 @@
     )[0];
 
     synth = new abcjs.synth.CreateSynth();
-    console.log('pass in this visualObj', visualObj);
     defaultMsPm = visualObj.millisecondsPerMeasure();
   }
   $: chosenMsPm = defaultMsPm;

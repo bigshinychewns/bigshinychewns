@@ -14,7 +14,6 @@ services:
       - pnpm-store:/bigshinychewns/.pnpm-store
     environment:
       - VITE_ENVIRONMENT=development
-    restart: on-failure
 volumes:
   node_modules:
   pnpm-store:

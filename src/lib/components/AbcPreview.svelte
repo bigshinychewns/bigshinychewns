@@ -1,10 +1,14 @@
 <script>
   import abcjs from 'abcjs';
-  import { onMount } from 'svelte';
-  import fsm from '$lib/util/fsm';
-  import { tuneAbc } from '$lib/util/stores';
+  import { onMount, beforeUpdate } from 'svelte';
   import ExpandButton from '$lib/components/ExpandButton.svelte';
   import PlayPauseButton from './PlayPauseButton.svelte';
+  import { page } from '$app/stores';
+  let _empty, _search, query, tune, tuneId, hrefBase;
+  $: [_empty, _search, query, tune, tuneId] = $page.url.pathname.split('/');
+  $: hrefBase = `/search/${query}/${tune}/${tuneId}`;
+
+  export let abc;
 
   let renderArea, synth, abcjsVisualObj, audioError;
   let playing = false;
@@ -17,9 +21,9 @@
 
   onMount(() => {
     console.log('AbcPreview onMount');
-    if (abcjs.synth.supportsAudio()) {
-      onAudioChange();
-    }
+    // if (abcjs.synth.supportsAudio()) {
+    //   onAudioChange();
+    // }
     return onUnmount;
   });
 
@@ -37,45 +41,6 @@
     responsive: "resize",
   };
 
-  const onAudioChange = () => {
-    parsing = true;
-    handleStop();
-    console.log('onAudioChange', $tuneAbc);
-    abcjsVisualObj = abcjs.renderAbc(
-      renderArea, $tuneAbc, abcRenderOptions
-    )[0];
-    renderArea.style.removeProperty('padding-bottom');
-    renderArea.style.removeProperty('overflow');
-    const textElms = renderArea.querySelectorAll(
-      `text[font-family*='Times New Roman']`
-    );
-    Array.from(textElms).forEach((elm) => {
-      elm.style.fontFamily = 'Copse';
-    });
-
-    synth = new abcjs.synth.CreateSynth();
-    console.log('initializing...');
-    console.log('millisecondsPerMeasure:', abcjsVisualObj.millisecondsPerMeasure());
-    synth.init({
-      visualObj: abcjsVisualObj,
-      audioContext: newAudioContext(),
-      millisecondsPerMeasure: abcjsVisualObj.millisecondsPerMeasure()
-    }).then(() =>{
-      console.log('priming...');
-      synth.prime()
-    }).then(() => {
-      console.log('signal success, calling parseAbcSuccess...');
-      fsm.parseAbcSuccess();
-      console.log('did it work?');
-      return Promise.resolve();
-    }).catch((error) => {
-      audioError = error;
-      console.warn("Synth Error: ", error);
-    }).finally(() => {
-      parsing = false;
-    });
-  }
-
   const handlePlay = () => {
     if (synth) {
       synth.start();
@@ -91,25 +56,69 @@
   }
 
   const handleClick = () => playing ? handleStop() : handlePlay();
+
+  // const onAudioChange = () => {
+  $: {
+    if (abc && renderArea) {
+      parsing = true;
+      handleStop();
+      abcjsVisualObj = abcjs.renderAbc(
+        renderArea, abc, abcRenderOptions
+      )[0];
+      if (renderArea) {
+        renderArea.style.removeProperty('padding-bottom');
+        renderArea.style.removeProperty('overflow');
+        const textElms = renderArea.querySelectorAll(
+          `text[font-family*='Times New Roman']`
+        );
+        Array.from(textElms).forEach((elm) => {
+          elm.style.fontFamily = 'Copse';
+        });
+      }
+
+      synth = new abcjs.synth.CreateSynth();
+      console.log('initializing...');
+      console.log('millisecondsPerMeasure:', abcjsVisualObj.millisecondsPerMeasure());
+      synth.init({
+        visualObj: abcjsVisualObj,
+        audioContext: newAudioContext(),
+        millisecondsPerMeasure: abcjsVisualObj.millisecondsPerMeasure()
+      }).then(() =>{
+        console.log('priming...');
+        synth.prime()
+      }).then(() => {
+        console.log('signal success, calling parseAbcSuccess...');
+        return Promise.resolve();
+      }).catch((error) => {
+        audioError = error;
+        console.warn("Synth Error: ", error);
+      }).finally(() => {
+        parsing = false;
+      });
+    }
+  }
+
 </script>
 
 <style>
   section {
     display: grid;
-    grid-template-rows: 474px 60px;
-    grid-area: 1 / 1 / 2 / 2;
+    grid-template-rows: 1fr 4em;
+    height: 100%;
   }
-  #renderArea {
+  #render-area {
     background-color: var(--darkest);
     color: var(--lightest);
     overflow-y: scroll;
-    height: 474px;
+    height: 100%;
+    max-width: calc(100vw - 4em);
   }
   .controls {
     display: grid;
-    grid-template-columns: repeat(9, 50px);
+    grid-auto-columns: 1fr;
     background-color: var(--light);
     place-items: center;
+    padding: 0.5em;
   }
   .parsing {
     display:none;
@@ -127,15 +136,17 @@
 </svelte:head>
 
 <section class="abc-preview" class:parsing>
-  <div>
-    <div id="renderArea" bind:this={renderArea}/>
+  <div class="">
+    <div id="render-area" bind:this={renderArea}/>
   </div>
   <div class="controls">
     <div class="play-pause-container">
       <PlayPauseButton {handleClick} {playing} />
     </div>
     <div class="expand-container">
-      <ExpandButton />
+      <a href={`${hrefBase}/expanded`}>
+        <ExpandButton />
+      </a>
     </div>
   </div>
 </section>

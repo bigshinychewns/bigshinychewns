@@ -13,7 +13,7 @@ export default function AbcCursorControl(renderArea) {
     this.cursor.setAttributeNS(null, 'y2', '0');
     svg.appendChild(this.cursor);
   };
-  self.beatSubdivisions = 2;
+  self.beatSubdivisions = 1;
   self.onEvent = (event) => {
     if (event.measureStart && event.left === null) {
       return;
@@ -24,8 +24,8 @@ export default function AbcCursorControl(renderArea) {
     }
 
     for (let note of event.elements) {
-      for (let x of note) {
-        x.classList.add('highlight');
+      for (let element of note) {
+        element.classList.add('highlight');
       }
     }
 
@@ -50,7 +50,6 @@ export default function AbcCursorControl(renderArea) {
   };
   self.lineEndAnticipation = 100;
   self.onLineEnd = ({ milliseconds, top, bottom }) => {
-    console.log('scrolling the music...');
     renderArea.scrollTop = top;
   };
 }

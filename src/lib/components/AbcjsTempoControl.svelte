@@ -1,5 +1,5 @@
 <script>
-  export let value = 100;
+  export let value = 140;
 </script>
 
 <style>
@@ -7,5 +7,3 @@
 </style>
 
 <input bind:value />
-
-

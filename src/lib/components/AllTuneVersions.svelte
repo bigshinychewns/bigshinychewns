@@ -1,47 +1,89 @@
 <script>
-  import AbcInput from "./AbcInput.svelte";
-  import { netRequest } from "$lib/util/theSession";
+  import scrollShadow from '$lib/util/scrollShadow';
+  import { page } from '$app/stores';
+  import { onMount } from 'svelte';
+
   export let data = {};
+
   const tuneVersions = data.settings;
-  const tuneUrl = data.url;
-  let fetchingAbc = false;
-  let fetchPromise;
-  const selectVersionHandler = (tuneVersionIndex) => {
-    fetchingAbc = true;
-    fetchPromise = netRequest(
-      'GET',
-      `/api/abc?url=${tuneUrl}&index=${tuneVersionIndex}`
-    ).then(response => response.text());
-  }
+  let _empty, _search, query, tune, tuneId, hrefBase;
+  $: [_empty, _search, query, tune, tuneId] = $page.url.pathname.split('/');
+  $: hrefBase = `/search/${query}/${tune}`;
+
+  let ul;
+  onMount(() => {
+    const selectedVersion = ul.querySelector('.selected');
+    if (selectedVersion) {
+      const scrollDistance =  selectedVersion.offsetTop;
+      ul.scrollTo({
+        top: scrollDistance,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
+  });
+
 </script>
+
 <style>
-  button {
-    width: 100%;
-    height: 100%;
+  section {
+    background-color: var(--light);
+    display: grid;
+    font-size: 1rem;
+    max-height: 100%;
+    overflow-y: scroll;
   }
+
   ul {
-    list-style: none;
-    padding-left: 0;
+    list-style-type: none;
+    overflow-y: scroll;
   }
+
   li {
-    height: 50px;
+    padding: 0.5em;
+    display: grid;
+    font-size: 1.25rem;
+  }
+
+  li:not(:first-child) {
+    border-top: 0.1em solid var(--dark);
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+
+  a {
+    color: var(--darkest);
+    text-decoration: none;
+  }
+
+  .muted {
+    font-size: 0.75em;
+    color: var(--dark);
+    padding-left: 0.5em;
+  }
+
+  .selected {
+    background-color: var(--darkest);
+  }
+
+  .selected a {
+    color: var(--light);
   }
 </style>
 
-<ul>
-  {#each tuneVersions as tuneVersion, index (tuneVersion.id)}
-    <li>
-      <button on:click={() => selectVersionHandler(index + 1)}>
-        {`${index + 1}: ${tuneVersion.id} - ${tuneVersion.key}`}
-      </button>
-    </li>
-  {/each}
-</ul>
-
-{#if fetchingAbc}
-  {#await fetchPromise}
-    <div>spinning!!!!</div>
-  {:then fetchedAbc}
-    <AbcInput abcInput={fetchedAbc} />
-  {/await}
-{/if}
+<section class="tune-versions">
+  <ul use:scrollShadow bind:this={ul}>
+    {#each tuneVersions as tuneVersion, index (tuneVersion.id)}
+      <li class:selected={tuneId == index + 1}>
+        <a href={`${hrefBase}/${index + 1}`}>
+          <span>
+            {`${index + 1}: ${tuneVersion.key}`}
+          </span>
+          <span class="muted">
+            {tuneVersion.id}
+          </span>
+        </a>
+      </li>
+    {/each}
+  </ul>
+</section>

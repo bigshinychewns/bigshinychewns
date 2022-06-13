@@ -1,5 +1,6 @@
 <script>
-  import fsm from '$lib/util/fsm';
+  import { page } from '$app/stores';
+
   export let result = {};
   const {
     name,
@@ -8,33 +9,44 @@
     alias,
     id
   } = result;
-  const clickHandler = () => fsm.selectTune(result);
+  const nameUrl = encodeURIComponent(name.trim().replaceAll(' ', '-'));
 </script>
 
 <style>
   li {
-    padding: 8px;
+    padding: 0.5em;
     display: grid;
+    font-size: 1.25rem;
   }
+
   li:not(:first-child) {
-    border-top: 2px solid var(--dark);
+    border-top: 0.1em solid var(--dark);
     overflow-x: hidden;
     white-space: nowrap;
   }
+
+  span {
+    color: var(--darkest)
+  }
+
   .muted {
     font-size: 0.75em;
     color: var(--dark);
-    padding-left: 5px;
+    padding-left: 0.25em;
+  }
+
+  a {
+    text-decoration: none;
   }
 </style>
 
 <li class="search-result">
-  <button on:click={clickHandler}>
+  <a href={`${$page.url.pathname}/${id}-${nameUrl}`}>
     <span>
       {name}
     </span>
     <span class="muted">
       {type}
     </span>
-  </button>
+  </a>
 </li>
