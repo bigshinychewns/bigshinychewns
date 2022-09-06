@@ -1,8 +1,13 @@
+// throw new Error("@migration task: Update +page.server.js (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292699)");
+
 import { searchSession } from '$lib/util/theSession';
 import { newGetAbc, fetchTuneById } from '$lib/util/theSession';
 import { decodeFromQuery } from '$lib/util/urlParams';
 
-export async function get({ url }) {
+export const prerender = 'auto';
+
+/** @type {import('./$types').PageServerLoad} */
+export async function load({ params }) {
   let
     query,
     searchResults,
@@ -19,7 +24,7 @@ export async function get({ url }) {
     encodedQuery,
     tuneIdTuneName,
     tuneVersion
-  ] = url.pathname.split('/');
+  ] = params.slug.pathname.split('/');
 
   if (encodedQuery) {
     query = decodeFromQuery(encodedQuery);
@@ -43,13 +48,11 @@ export async function get({ url }) {
   abc = await abcPromise;
 
   return {
-    body: {
-      searchResults,
-      tune,
-      abc,
-      query,
-      tuneId,
-      tuneVersion
-    }
+    searchResults,
+    tune,
+    abc,
+    query,
+    tuneId,
+    tuneVersion
   };
 }

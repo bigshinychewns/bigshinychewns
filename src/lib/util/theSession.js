@@ -1,7 +1,7 @@
 
 const urlBase = 'https://thesession.org';
 
-// https://thesession.org/tunes/search?q=humours
+// https://thesession.org/tunes/search?q=humours&format=json
 const searchSession = async (query, page = 1, signal) => {
   // console.log('send a request out to session:', `${urlBase}/tunes/search?q="${query}"&page=${page}&format=json`);
   const perPage = 50;
@@ -32,15 +32,15 @@ const newGetAbc = async (tuneId, tuneVersion) => {
   ).then(response => response.text());
 };
 
-const fetchSessionTuneAbc = async (tuneUrl, tuneVersionIndex, signal) => {
-  // console.log(`fetchSessionTuneAbc(${tuneUrl}, ${tuneVersionIndex})`);
-  const signalParam = signal ? { signal } : {};
-  return netRequest(
-    'GET',
-    `/api/abc?url=${tuneUrl}&index=${tuneVersionIndex}`,
-    signalParam
-  ).then(response => response.text());
-};
+// const fetchSessionTuneAbc = async (tuneUrl, tuneVersionIndex, signal) => {
+//   // console.log(`fetchSessionTuneAbc(${tuneUrl}, ${tuneVersionIndex})`);
+//   const signalParam = signal ? { signal } : {};
+//   return netRequest(
+//     'GET',
+//     `/api/abc?url=${tuneUrl}&index=${tuneVersionIndex}`,
+//     signalParam
+//   ).then(response => response.text());
+// };
 
 const apiFetchSessionTuneAbc = async (tuneUrl, tuneVersionIndex) => {
   // console.log('requesting tune abc...');
@@ -70,20 +70,20 @@ const fetchTuneById = async (id, signal) => {
   }
 };
 
-const fetchTuneVersion = async (tuneUrl, tuneVersion, signal) => {
-  const signalParam = signal ? { signal } : {};
-  const response = await netRequest(
-    'GET',
-    `/api/abc?url=${tuneUrl}&index=${tuneVersion}`,
-    signalParam
-  );
-  const parsedTune = await response.text();
-  if (response.ok) {
-    return parsedTune;
-  } else {
-    throw new Error(parsedTune);
-  }
-};
+// const fetchTuneVersion = async (tuneUrl, tuneVersion, signal) => {
+//   const signalParam = signal ? { signal } : {};
+//   const response = await netRequest(
+//     'GET',
+//     `/api/abc?url=${tuneUrl}&index=${tuneVersion}`,
+//     signalParam
+//   );
+//   const parsedTune = await response.text();
+//   if (response.ok) {
+//     return parsedTune;
+//   } else {
+//     throw new Error(parsedTune);
+//   }
+// };
 
 const fetchSessionTune = async (url, signal) => {
   // console.log('searching for tune at', url);
@@ -127,10 +127,10 @@ const netRequest = async (method, url, params)  => {
 export {
   searchSession,
   fetchSessionTune,
-  fetchSessionTuneAbc,
+  // fetchSessionTuneAbc,
   newGetAbc,
   apiFetchSessionTuneAbc,
   netRequest,
   fetchTuneById,
-  fetchTuneVersion
+  // fetchTuneVersion
 };

@@ -1,4 +1,6 @@
 <script>
+  // throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
   import AbcPreview from '$lib/components/AbcPreview.svelte';
   import TuneVersion from '$lib/components/TuneVersion.svelte';
   import SearchInput from '$lib/components/SearchInput.svelte';
@@ -10,7 +12,10 @@
   import AbcExpanded from '$lib/components/AbcExpanded.svelte';
   // import scrollShadow from '$lib/util/scrollShadow';
 
-  export let tune, abc, query, searchResults; //, tuneId, tuneVersion;
+  /** @type {import('./$types').PageData} */
+  export let data;
+  let {tune, abc, query, searchResults} = data; //, tuneId, tuneVersion;
+  $: ({tune, abc, query, searchResults} = data);
 </script>
 
 <style>

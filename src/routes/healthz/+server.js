@@ -1,5 +1,3 @@
-export async function get() {
-  return {
-    status: 200
-  };
+export async function GET() {
+  return new Response(undefined);
 }
