@@ -1,5 +1,6 @@
 <script>
   import { page } from '$app/stores';
+  import { encodeForUrl } from '$lib/util/urlParams';
 
   export let result = {};
   const {
@@ -9,7 +10,8 @@
     alias,
     id
   } = result;
-  const nameUrl = encodeURIComponent(name.trim().replaceAll(' ', '-'));
+
+  const nameUrl = encodeForUrl(name);
 </script>
 
 <style>

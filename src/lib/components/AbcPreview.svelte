@@ -1,12 +1,15 @@
 <script>
   import abcjs from 'abcjs';
   import { onMount, beforeUpdate } from 'svelte';
-  import ExpandButton from '$lib/components/ExpandButton.svelte';
-  import PlayPauseButton from './PlayPauseButton.svelte';
+  import IconButton from '$lib/components/IconButton.svelte'
+  import ArrowsExpandIcon from '$lib/icons/ArrowsExpandIcon.svelte';
+  import PlayIcon from '$lib/icons/PlayIcon.svelte';
+  import PauseIcon from '$lib/icons/PauseIcon.svelte';
   import { page } from '$app/stores';
-  let _empty, _search, query, tune, tuneId, hrefBase;
-  $: [_empty, _search, query, tune, tuneId] = $page.url.pathname.split('/');
-  $: hrefBase = `/search/${query}/${tune}/${tuneId}`;
+
+  let _empty, origin, query, tune, tuneId, hrefBase;
+  $: [_empty, origin, query, tune, tuneId] = $page.url.pathname.split('/');
+  $: hrefBase = `/${origin}/${query}/${tune}/${tuneId}`;
 
   export let abc;
 
@@ -129,6 +132,9 @@
   .expand-container {
     grid-area: 1 / 9 / 1 / 9;
   }
+  a {
+    color: var(--darkest);
+  }
 </style>
 
 <svelte:head>
@@ -141,11 +147,17 @@
   </div>
   <div class="controls">
     <div class="play-pause-container">
-      <PlayPauseButton {handleClick} {playing} />
+      <IconButton onClick={handleClick}>
+        {#if playing}
+          <PlayIcon />
+        {:else}
+          <PauseIcon />
+        {/if}
+      </IconButton>
     </div>
     <div class="expand-container">
       <a href={`${hrefBase}/expanded`}>
-        <ExpandButton />
+        <ArrowsExpandIcon />
       </a>
     </div>
   </div>

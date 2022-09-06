@@ -1,5 +1,6 @@
 import { searchSession } from '$lib/util/theSession';
 import { newGetAbc, fetchTuneById } from '$lib/util/theSession';
+import { decodeFromQuery } from '$lib/util/urlParams';
 
 export async function get({ url }) {
   let
@@ -21,7 +22,7 @@ export async function get({ url }) {
   ] = url.pathname.split('/');
 
   if (encodedQuery) {
-    query = decodeURIComponent(encodedQuery.replaceAll('+', ' '));
+    query = decodeFromQuery(encodedQuery);
 
     if (!tuneIdTuneName) {
       searchPromise = searchSession(query);

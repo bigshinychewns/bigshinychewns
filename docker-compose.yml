@@ -4,10 +4,10 @@ services:
     build: .
     command: bash -c 'pnpm install && pnpm run dev -- --open --host'
     ports:
-      - '3000:3000'
+      - '5173:5173'
     working_dir: '/bigshinychewns'
     expose:
-      - '3000'
+      - '5173'
     volumes:
       - '.:/bigshinychewns'
       - node_modules:/bigshinychewns/node_modules

@@ -1,6 +1,23 @@
 <script>
-  import BackButton from '$lib/components/BackButton.svelte';
-  const showBackButton = () => true;
+  import Menu from '$lib/components/Menu.svelte';
+  import IconButton from '$lib/components/IconButton.svelte';
+  import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
+
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+
+  let url_path_segments = [];
+  let showBackButton = false;
+
+  $: url_path_segments = $page.url.pathname.split('/');
+
+  $: showBackButton = url_path_segments.length > 3;
+
+  const handleClick = () => {
+    if (url_path_segments.length > 0) {
+      goto(url_path_segments.slice(0, -1).join('/'));
+    }
+  }
 </script>
 
 <svelte:head>
@@ -81,7 +98,7 @@
     place-items: center;
     grid-template-columns: 5fr 20fr 50fr 20fr 5fr;
     justify-items: stretch;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
     grid-template-areas:
       "backbutton spacerleft title spacerright forwardbutton";
   }
@@ -108,6 +125,8 @@
 
   .right {
     grid-area: forwardbutton;
+    height: 100%;
+    width: 100%;
   }
 </style>
 
@@ -115,11 +134,14 @@
   <nav>
     <div class="left">
       {#if showBackButton}
-        <BackButton />
+        <IconButton onClick={handleClick} >
+          <ChevronLeftIcon --color="var(--light)" />
+        </IconButton>
       {/if}
     </div>
     <h1>Big Shiny Chewns</h1>
     <div class="right">
+      <Menu />
     </div>
   </nav>
 </header>

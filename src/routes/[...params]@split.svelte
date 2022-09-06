@@ -1,36 +1,43 @@
 <script>
   import AbcPreview from '$lib/components/AbcPreview.svelte';
-  import AllTuneVersions from '$lib/components/AllTuneVersions.svelte';
+  import TuneVersion from '$lib/components/TuneVersion.svelte';
   import SearchInput from '$lib/components/SearchInput.svelte';
-  import SearchResults from '$lib/components/SearchResults.svelte';
+  import SearchResult from '$lib/components/SearchResult.svelte';
   import SelectedTuneBanner from '$lib/components/SelectedTuneBanner.svelte';
-  import scrollShadow from '$lib/util/scrollShadow';
+  import List from '$lib/components/List.svelte';
+  import { tuneVersionIndex } from '$lib/util/stores';
+  import AbcEditor from '$lib/components/AbcEditor.svelte';
+  import AbcExpanded from '$lib/components/AbcExpanded.svelte';
+  // import scrollShadow from '$lib/util/scrollShadow';
 
-  export let tune, abc, query, tuneId, tuneVersion, searchResults;
+  export let tune, abc, query, searchResults; //, tuneId, tuneVersion;
 </script>
 
 <style>
   .left {
-    display: grid;
-    grid-auto-flow: row;
+    display: flex;
+    /* grid-auto-flow: row;
     grid-row-gap: 1em;
-    grid-template-rows: 2.5em 4em auto;
+    grid-template-rows: 2.5em 4em auto; */
+    flex-direction: column;
+    gap: 0.5em;
+    overflow-y: hidden;
   }
 
-  .left.tune-selected {
+  /* .left.tune-selected {
     grid-auto-rows: unset;
     grid-template-rows: 2.5em auto;
-  }
+  } */
 
   section {
     max-height: calc(100vh - 7em);
     max-width: calc(100vw - 4em);
   }
 
-  .search-results-container {
-    overflow-y: scroll;
+  /* .search-results-container {
     display: grid;
-  }
+    overflow-y: scroll;
+  } */
 </style>
 
 <section class="left" class:tune-selected={query && !tune}>
@@ -38,13 +45,23 @@
     <SearchInput query={query} />
   {/if}
   {#if query && !tune}
-    <div class="search-results-container" use:scrollShadow>
-      <SearchResults results={searchResults} />
-    </div>
+    {#if searchResults.tunes.length}
+      <List>
+        {#each searchResults.tunes as result (result.id)}
+          <SearchResult {result} />
+        {/each}
+      </List>
+    {:else}
+      <h3>No results found</h3>
+    {/if}
   {/if}
   {#if tune}
     <SelectedTuneBanner tune={tune} />
-    <AllTuneVersions data={tune} />
+    <List>
+      {#each tune.settings as tuneVersion, index (tuneVersion.id)}
+        <TuneVersion {tuneVersion} {index}/>
+      {/each}
+    </List>
   {/if}
 </section>
 {#if abc}

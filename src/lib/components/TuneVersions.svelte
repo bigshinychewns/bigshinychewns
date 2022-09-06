@@ -13,6 +13,7 @@
     font-size: 1.5em;
     list-style-type: none;
     height: 100%;
+    scrollbar-width: none;
   }
   li {
     padding: 8px;

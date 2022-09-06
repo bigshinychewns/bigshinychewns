@@ -1,34 +1,40 @@
 <script>
-  import SearchIcon from '$lib/components/SearchIcon.svelte';
   import {
     goto,
   } from '$app/navigation';
+  import SearchIcon from '$lib/icons/SearchIcon.svelte';
+  import { encodeForQuery } from '$lib/util/urlParams';
 
   export let query = '';
   const handleSearch = () => {
-    const queryUrl = encodeURIComponent(query).replaceAll('%20', '+');
+    const queryUrl = encodeForQuery(query);
     goto(`/search/${queryUrl}/`);
   }
 </script>
 
 <style>
+  section {
+    height: 2.5em;
+  }
+
   input {
-    font-size: 1.5em;
     background-color: var(--light);
-    padding: 0.25em;
     text-align: center;
+    font-size: 1.5em;
+    width: calc(100% - 1.5em);
   }
 
   form {
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 3em;
   }
 
   button {
+    width: 3em;
     background-color: var(--light);
     display: grid;
     place-items: center;
-    border-left: 5px solid var(--dark);
+    border-left: 0.5em solid var(--dark);
   }
 
   .search-results-container {
@@ -36,7 +42,7 @@
   }
 </style>
 
-<section class="searcher">
+<section class="search-input">
   <form on:submit|preventDefault={handleSearch}>
     <input type="text" name="q" bind:value={query} />
     <button type="submit">

@@ -2,13 +2,14 @@
   svg {
     display: block;
     margin: auto;
+    color: var(--darkest)
   }
 </style>
-<!--
+
+<svg
+  class="search-icon"
   width="24"
   height="24"
- -->
-<svg
   viewBox="1 -1 24 24"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"

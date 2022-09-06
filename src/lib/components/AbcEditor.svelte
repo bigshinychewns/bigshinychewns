@@ -1,13 +1,32 @@
 <script>
-  import AcceptButton from './AcceptButton.svelte';
-  import CancelButton from './CancelButton.svelte';
-  import { tuneAbc } from '$lib/util/stores';
-  import fsm from '$lib/util/fsm';
+  import IconButton from './IconButton.svelte';
+  import CheckIcon from '$lib/icons/CheckIcon.svelte'
+  import CloseIcon from '$lib/icons/CloseIcon.svelte';
+  import DownArrowIcon from '$lib/icons/DownArrowIcon.svelte';
+  import { savedTunes } from '$lib/util/stores';
 
-  let editorValue = $tuneAbc;
+  export let abc;
+  export let showEditor = false;
+  // export let tuneId;
+  // export let tuneVersion;
 
   const acceptHandler = () => {
-    fsm.save(editorValue);
+    console.log('this is bullshit');
+    showEditor = false;
+  };
+
+  const formatHandler = () => {
+    const whatever = {
+
+    };
+  };
+
+  const cancelHandler = () => {
+    showEditor = false;
+  };
+
+  const saveHandler = () => {
+    savedTunes.add()
   };
 </script>
 
@@ -29,19 +48,37 @@
   .cancel-button-container {
     grid-area:1 / 6 / 1 / 6;
   }
+  .save-button-container {
+    grid-area:1 / 9 / 1 / 9;
+  }
   textarea {
+    font-size: 2em;
     background-color: var(--light);
   }
 </style>
 
 <section class="abc-editor">
-  <textarea bind:value={editorValue} />
+  <textarea bind:value={abc} />
   <div class="controls">
+    <div class="save-format-button-container">
+        <IconButton onClick={formatHandler}>
+          <span>Format</span>
+        </IconButton>
+    </div>
     <div class="accept-button-container">
-      <AcceptButton onClick={acceptHandler} />
+      <IconButton onClick={acceptHandler}>
+        <CheckIcon />
+      </IconButton>
     </div>
     <div class="cancel-button-container">
-      <CancelButton />
+      <IconButton onClick={cancelHandler}>
+        <CloseIcon />
+      </IconButton>
+    </div>
+    <div class="save-button-container">
+      <IconButton onClick={saveHandler} >
+        <DownArrowIcon />
+      </IconButton>
     </div>
   </div>
 </section>

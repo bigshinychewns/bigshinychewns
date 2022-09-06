@@ -2,12 +2,16 @@
   import AbcCursorControl from "$lib/util/AbcjsCursorControl";
   import abcjs from 'abcjs';
   import { onMount } from 'svelte';
-  import PlayPauseButton from './PlayPauseButton.svelte';
-  import AbcjsTempoControl from './AbcjsTempoControl.svelte'
-  import EditAbcButton from "./EditAbcButton.svelte";
-  import RewindButton from "./RewindButton.svelte";
+  // import SaveButton from '$lib/components/SaveButton.svelte'
+  import IconButton from '$lib/components/IconButton.svelte';
+  import RewindIcon from "$lib/icons/RewindIcon.svelte";
+  import PauseIcon from "$lib/icons/PauseIcon.svelte";
+  import PlayIcon from "$lib/icons/PlayIcon.svelte";
+  import DownArrowIcon from "$lib/icons/DownArrowIcon.svelte";
+  import { savedTunes } from "$lib/util/stores";
 
   export let tuneAbc;
+  export let showEditor;
 
   let abcjsVisualObj,
     audioContext,
@@ -65,10 +69,10 @@
     }
     // Q:1/2=60\r\n
 
-    const fuck = abcjs.renderAbc(
+    const abcObj = abcjs.renderAbc(
       renderArea, `${tuneAbc}`, abcRenderOptions
     );
-    abcjsVisualObj = fuck[0];
+    abcjsVisualObj = abcObj[0];
 
     console.log('miliseconds per measure', abcjsVisualObj.millisecondsPerMeasure());
     renderArea.style.removeProperty('padding-bottom');
@@ -131,6 +135,14 @@
     if (synthControl) {
       synthControl.restart();
     }
+  };
+
+  const handleEdit = () => {
+    showEditor = !showEditor;
+  };
+
+  const handleSave = () => {
+    savedTunes.add(tuneAbc);
   }
 
   const togglePlayPause = () => playing ? handlePause() : handlePlay();
@@ -188,27 +200,52 @@
   .rewind-container {
     grid-area: 1 / 3 / 1 / 3;
   }
+  .save-icon-container {
+    grid-area: 1 / 10 / 1 / 10;
+  }
+  .abc-button {
+    display: grid;
+    place-items: center;
+    color: var(--darkest);
+    font-variant: small-caps;
+    text-underline-offset: 0.2em;
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 1.3em;
+  }
 </style>
 
 <svelte:head>
   <link href="/styles/abcjs.css" rel="stylesheet">
 </svelte:head>
 
-<section class="expanded-abc" class:hide={parsing}>
+<section class="abc-expanded" class:hide={parsing}>
   <div id="renderArea" bind:this={renderArea}/>
   <div class="fake-controls" />
   <div class="controls">
     <div class="edit-abc-container">
-      <EditAbcButton />
+      <IconButton onClick={handleEdit}>
+        <span class="abc-button">Abc</span>
+      </IconButton>
     </div>
     <div class="rewind-container">
-      <RewindButton onClick={handleRewind}/>
+      <IconButton onClick={handleRewind}>
+        <RewindIcon />
+      </IconButton>
     </div>
     <div class="play-pause-container">
-      <PlayPauseButton handleClick={togglePlayPause} {playing} />
+      <IconButton onClick={togglePlayPause}>
+        {#if playing}
+          <PauseIcon />
+        {:else}
+          <PlayIcon />
+        {/if}
+      </IconButton>
     </div>
-    <div class="tempo-control-container">
-      <AbcjsTempoControl bind:value={tempo} />
+    <div class="save-icon-container">
+      <IconButton onClick={handleSave}>
+        <DownArrowIcon />
+      </IconButton>
     </div>
   </div>
 </section>
