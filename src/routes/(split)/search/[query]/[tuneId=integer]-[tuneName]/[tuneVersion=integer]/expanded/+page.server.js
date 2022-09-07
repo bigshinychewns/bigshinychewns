@@ -3,14 +3,13 @@
 import { newGetAbc } from '$lib/util/theSession';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params}) {
-// export async function get({ params }) {
-  const { tuneId, tuneVersion } = params;
-  const abc = await newGetAbc(tuneId, tuneVersion);
+export async function load({ params }) {
+	const { tuneId, tuneVersion } = params;
+	const abc = await newGetAbc(tuneId, tuneVersion);
 
-  return {
-    abc,
-    tuneId,
-    tuneVersion
-  };
+	return {
+		abc,
+		tuneId,
+		tuneVersion
+	};
 }

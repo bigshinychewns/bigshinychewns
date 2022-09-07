@@ -1,17 +1,17 @@
 import { readable } from "svelte/store";
 
 const mediaQuery = (query) => {
-  const mediaQueryList = window.matchMedia(query);
+	const mediaQueryList = window.matchMedia(query);
 
-  const mediaStore = readable(mediaQueryList.matches, set => {
-    const handleChange = () => set(mediaQueryList.matches);
+	const mediaStore = readable(mediaQueryList.matches, set => {
+		const handleChange = () => set(mediaQueryList.matches);
 
-    mediaQueryList.addListener(handleChange);
+		mediaQueryList.addListener(handleChange);
 
-    return () => mediaQueryList.removeListener(handleChange);
-  });
+		return () => mediaQueryList.removeListener(handleChange);
+	});
 
-  return mediaStore;
+	return mediaStore;
 };
 
 export default mediaQuery;
