@@ -6,7 +6,7 @@
 
 	export let data;
 	let { abc, tuneId, tuneVersion } = data;
-	$: ({ abc, tuneId, tuneVersion } = data);
+	// $: ({ abc, tuneId, tuneVersion } = data);
 	let showEditor = false;
 </script>
 

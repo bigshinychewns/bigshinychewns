@@ -16,15 +16,15 @@ export async function load({ params }) {
 		tuneId,
 		tunePromise,
 		abcPromise,
-		searchPromise;
+		searchPromise,
+		_tuneName;
 
 	const [
-		_empty,
 		_search,
 		encodedQuery,
 		tuneIdTuneName,
 		tuneVersion
-	] = params.slug.pathname.split('/');
+	] = params.path.split('/');
 
 	if (encodedQuery) {
 		query = decodeFromQuery(encodedQuery);
@@ -34,19 +34,21 @@ export async function load({ params }) {
 		}
 
 		if (tuneIdTuneName && tuneIdTuneName.indexOf('-') !== -1) {
-			const [tuneId, _tuneName] = tuneIdTuneName.split('-');
+			[tuneId, _tuneName] = tuneIdTuneName.split('-');
 			tunePromise = fetchTuneById(tuneId);
 
 			if (tuneVersion) {
 				abcPromise = newGetAbc(tuneId, tuneVersion);
 			}
 		}
+		[searchResults, tune, abc] = await Promise.all(
+			[searchPromise, tunePromise, abcPromise]
+		)
 	}
 
-	searchResults = await searchPromise;
-	tune = await tunePromise;
-	abc = await abcPromise;
-
+	// searchResults = await searchPromise;
+	// tune = await tunePromise;
+	// abc = await abcPromise;
 	return {
 		searchResults,
 		tune,

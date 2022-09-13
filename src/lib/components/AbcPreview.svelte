@@ -116,9 +116,9 @@
 		<div class="play-pause-container">
 			<IconButton onClick={handleClick}>
 				{#if playing}
-					<PlayIcon />
-				{:else}
 					<PauseIcon />
+				{:else}
+					<PlayIcon />
 				{/if}
 			</IconButton>
 		</div>

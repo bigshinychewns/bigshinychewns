@@ -1,5 +1,5 @@
 <script>
-	import { browser } from '$app/env';
+	import { browser } from '$app/environment';
 	import mediaQuery from '$lib/util/mediaQuery';
 	let isMobile;
 	$: {

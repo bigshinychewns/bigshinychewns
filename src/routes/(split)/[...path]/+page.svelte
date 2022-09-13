@@ -16,6 +16,7 @@
 	export let data;
 	let { tune, abc, query, searchResults } = data; //, tuneId, tuneVersion;
 	$: ({ tune, abc, query, searchResults } = data);
+	console.log(tune, query, searchResults);
 </script>
 
 <section class="left" class:tune-selected={query && !tune}>
