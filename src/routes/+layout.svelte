@@ -98,6 +98,7 @@
 		min-height: 100vh;
 		display: grid;
 		grid-template-rows: 4em 1fr;
+		background-color: var(--darkest);
 	}
 
 	header {

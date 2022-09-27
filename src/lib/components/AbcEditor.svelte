@@ -11,7 +11,6 @@
 	// export let tuneVersion;
 
 	const acceptHandler = () => {
-		console.log('this is bullshit');
 		showEditor = false;
 	};
 

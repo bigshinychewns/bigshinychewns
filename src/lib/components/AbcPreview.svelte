@@ -23,7 +23,6 @@
 	};
 
 	onMount(() => {
-		console.log('AbcPreview onMount');
 		// if (abcjs.synth.supportsAudio()) {
 		//   onAudioChange();
 		// }
@@ -77,8 +76,8 @@
 			}
 
 			synth = new abcjs.synth.CreateSynth();
-			console.log('initializing...');
-			console.log('millisecondsPerMeasure:', abcjsVisualObj.millisecondsPerMeasure());
+			// console.log('initializing...');
+			// console.log('millisecondsPerMeasure:', abcjsVisualObj.millisecondsPerMeasure());
 			synth
 				.init({
 					visualObj: abcjsVisualObj,
@@ -86,11 +85,11 @@
 					millisecondsPerMeasure: abcjsVisualObj.millisecondsPerMeasure()
 				})
 				.then(() => {
-					console.log('priming...');
+					// console.log('priming...');
 					synth.prime();
 				})
 				.then(() => {
-					console.log('signal success, calling parseAbcSuccess...');
+					// console.log('signal success, calling parseAbcSuccess...');
 					return Promise.resolve();
 				})
 				.catch((error) => {

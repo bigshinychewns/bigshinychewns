@@ -43,8 +43,4 @@
 		place-items: center;
 		border-left: 0.5em solid var(--dark);
 	}
-
-	.search-results-container {
-		display: grid;
-	}
 </style>

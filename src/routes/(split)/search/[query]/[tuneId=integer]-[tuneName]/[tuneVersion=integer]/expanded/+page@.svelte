@@ -13,5 +13,5 @@
 {#if showEditor}
 	<AbcEditor bind:abc bind:showEditor />
 {:else}
-	<AbcExpanded tuneAbc={abc} bind:showEditor />
+	<AbcExpanded {abc} bind:showEditor />
 {/if}

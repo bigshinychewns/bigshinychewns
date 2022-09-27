@@ -9,16 +9,22 @@
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import DownArrowIcon from '$lib/icons/DownArrowIcon.svelte';
 	import { savedTunes } from '$lib/util/stores';
+	import MinusIcon from '$lib/icons/MinusIcon.svelte';
+	import PlusIcon from '$lib/icons/PlusIcon.svelte';
 
-	export let tuneAbc;
+	export let abc;
 	export let showEditor;
 
-	let abcjsVisualObj, audioContext, parsing, playing, renderArea, synth, synthControl, tempo;
+	let abcjsVisualObj, audioContext, parsing, playing, renderArea, synth, synthControl;
+	let halfNoteTempo = 80;
+	$: tempoString = `Q: 1/2=${halfNoteTempo}`;
 
 	const onUnmount = () => {
 		const activeAudioContext = abcjs.synth.activeAudioContext();
 		activeAudioContext?.close();
 	};
+
+	onMount(() => onUnmount);
 
 	const newAudioContext = () => {
 		window.AudioContext =
@@ -31,22 +37,21 @@
 		return newAudioContext;
 	};
 
-	onMount(() => {
-		if (abcjs.synth.supportsAudio()) {
-			audioContext = newAudioContext();
-			const cursorControl = new AbcCursorControl(renderArea);
-			synthControl = new abcjs.synth.SynthController();
-			synthControl.load('.fake-controls', cursorControl, {
-				displayLoop: false,
-				displayRestart: false,
-				displayPlay: false,
-				displayProgress: false,
-				displayWarp: false
-			});
-			onAudioChange();
-		}
-		return onUnmount;
-	});
+	// const initAudioContext = () => {
+	// 	if (abcjs.synth.supportsAudio()) {
+	// 		audioContext = audioContext || newAudioContext();
+	// 		const cursorControl = new AbcCursorControl(renderArea);
+	// 		synthControl = new abcjs.synth.SynthController();
+	// 		synthControl.load('.fake-controls', cursorControl, {
+	// 			displayLoop: false,
+	// 			displayRestart: false,
+	// 			displayPlay: false,
+	// 			displayProgress: false,
+	// 			displayWarp: false
+	// 		});
+	// 		onAudioChange();
+	// 	}
+	// }
 
 	const abcRenderOptions = {
 		tablature: [{ instrument: 'violin' }],
@@ -54,14 +59,19 @@
 		add_classes: true
 	};
 
-	const onAudioChange = () => {
+	const onAudioChange = async () => {
 		parsing = true;
 		if (synthControl) {
 			synthControl.disable(true);
 		}
 		// Q:1/2=60\r\n
 
-		const abcObj = abcjs.renderAbc(renderArea, `${tuneAbc}`, abcRenderOptions);
+		let abcWithTempo = abc;
+		if (abc.indexOf('Q:') === -1) {
+			abcWithTempo = abc.replace('K:', `Q: 1/2=${halfNoteTempo}\r\nK:`)
+		}
+
+		const abcObj = abcjs.renderAbc(renderArea, abcWithTempo, abcRenderOptions);
 		abcjsVisualObj = abcObj[0];
 
 		console.log('miliseconds per measure', abcjsVisualObj.millisecondsPerMeasure());
@@ -76,40 +86,50 @@
 
 		const audioParams = {
 			audioContext: audioContext,
-			visualObj: abcjsVisualObj,
-			qpm: tempo
+			visualObj: abcjsVisualObj
 		};
 
 		synth = new abcjs.synth.CreateSynth();
 		synth
 			.init(audioParams)
 			.then((_response) => {
-				console.log('init complete...');
+				// console.log('init complete...');
 				if (synthControl) {
-					console.log('found synthcontrol');
+					// console.log('found synthcontrol');
 					synthControl
 						.setTune(abcjsVisualObj, true, audioParams)
 						.then((arg) => {
-							console.log('return from setTune:', arg);
+							// console.log('return from setTune:', arg);
 							return synth.prime();
 						})
 						.then((arg) => {
-							console.log('return from prime:', arg);
+							// console.log('return from prime:', arg);
 							return Promise.resolve();
 						});
-				} else {
-					console.log('no synth control??');
 				}
 			})
 			.catch((error) => console.warn('Audio error:', error))
 			.finally(() => (parsing = false));
 	};
 
-	const handlePlay = () => {
-		if (synthControl) {
+	const handlePlay = async () => {
+		if (abcjs.synth.supportsAudio()) {
+			if (synthControl === undefined) {
+				audioContext = audioContext || newAudioContext();
+				const cursorControl = new AbcCursorControl(renderArea);
+				synthControl = new abcjs.synth.SynthController();
+				synthControl.load('.fake-controls', cursorControl, {
+					displayLoop: false,
+					displayRestart: false,
+					displayPlay: false,
+					displayProgress: false,
+					displayWarp: false
+				});
+				await onAudioChange();
+			}
 			synthControl.play();
+			playing = true;
 		}
-		playing = true;
 	};
 
 	const handlePause = () => {
@@ -130,12 +150,24 @@
 	};
 
 	const handleSave = () => {
-		savedTunes.add(tuneAbc);
+		savedTunes.add(abc);
 	};
 
 	const togglePlayPause = () => (playing ? handlePause() : handlePlay());
 
-	$: if (tempo && renderArea) {
+	const decreaseTempo = async () => {
+		halfNoteTempo = halfNoteTempo - 5;
+		playing = false;
+		onAudioChange();
+	}
+
+	const increaseTempo = async () => {
+		halfNoteTempo = halfNoteTempo + 5;
+		playing = false;
+		onAudioChange();
+	}
+
+	$: if (renderArea) {
 		onAudioChange();
 	}
 </script>
@@ -165,6 +197,19 @@
 				{:else}
 					<PlayIcon />
 				{/if}
+			</IconButton>
+		</div>
+		<div class="decrease-tempo-container">
+			<IconButton onClick={decreaseTempo}>
+				<MinusIcon />
+			</IconButton>
+		</div>
+		<div class="current-tempo-container">
+			{halfNoteTempo}
+		</div>
+		<div class="increase-tempo-container">
+			<IconButton onClick={increaseTempo}>
+				<PlusIcon />
 			</IconButton>
 		</div>
 		<div class="save-icon-container">
@@ -211,17 +256,23 @@
 	.fake-controls {
 		display: none;
 	}
-	.play-pause-container {
-		grid-area: 1 / 5 / 1 / 5;
-	}
-	.tempo-control-container {
-		grid-area: 1 / 8 / 1 / 8;
-	}
 	.edit-abc-container {
 		grid-area: 1 / 1 / 1 / 1;
 	}
 	.rewind-container {
 		grid-area: 1 / 3 / 1 / 3;
+	}
+	.play-pause-container {
+		grid-area: 1 / 5 / 1 / 5;
+	}
+	.decrease-tempo-container {
+		grid-area: 1 / 7 / 1 / 7;
+	}
+	.current-tempo-container {
+		grid-area: 1 / 8 / 1 / 8;
+	}
+	.increase-tempo-container {
+		grid-area: 1 / 9 / 1 / 9;
 	}
 	.save-icon-container {
 		grid-area: 1 / 10 / 1 / 10;
