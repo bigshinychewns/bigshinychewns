@@ -20,7 +20,8 @@
 
 <style>
 	svg {
-		transform: scale(var(--scale, 2));
 		color: var(--color, var(--darkest));
+		height: auto;
+		width: 3em;
 	}
 </style>

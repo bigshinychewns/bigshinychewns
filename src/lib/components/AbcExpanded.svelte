@@ -1,156 +1,45 @@
 <script>
-	import AbcCursorControl from '$lib/util/AbcjsCursorControl';
-	import abcjs from 'abcjs';
-	import { onMount } from 'svelte';
-	// import SaveButton from '$lib/components/SaveButton.svelte'
 	import IconButton from '$lib/components/IconButton.svelte';
 	import RewindIcon from '$lib/icons/RewindIcon.svelte';
 	import PauseIcon from '$lib/icons/PauseIcon.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import DownArrowIcon from '$lib/icons/DownArrowIcon.svelte';
-	import { savedTunes } from '$lib/util/stores';
 	import MinusIcon from '$lib/icons/MinusIcon.svelte';
 	import PlusIcon from '$lib/icons/PlusIcon.svelte';
+	import abcjsCanvas from '$lib/util/abcjsCanvas';
 
 	export let abc;
 	export let showEditor;
 
-	let abcjsVisualObj, audioContext, parsing, playing, renderArea, synth, synthControl;
+	let playing = false;
+	let parsing = true;
+	let playFunc = () => {};
+	let pauseFunc = () => {};
+	let rewindFunc = () => {};
+
 	let halfNoteTempo = 80;
-	$: tempoString = `Q: 1/2=${halfNoteTempo}`;
-
-	const onUnmount = () => {
-		const activeAudioContext = abcjs.synth.activeAudioContext();
-		activeAudioContext?.close();
-	};
-
-	onMount(() => onUnmount);
-
-	const newAudioContext = () => {
-		window.AudioContext =
-			window.AudioContext ||
-			window.webkitAudioContext ||
-			navigator.mozAudioContext ||
-			navigator.msAudioContext;
-		const newAudioContext = new window.AudioContext();
-		newAudioContext.resume();
-		return newAudioContext;
-	};
-
-	// const initAudioContext = () => {
-	// 	if (abcjs.synth.supportsAudio()) {
-	// 		audioContext = audioContext || newAudioContext();
-	// 		const cursorControl = new AbcCursorControl(renderArea);
-	// 		synthControl = new abcjs.synth.SynthController();
-	// 		synthControl.load('.fake-controls', cursorControl, {
-	// 			displayLoop: false,
-	// 			displayRestart: false,
-	// 			displayPlay: false,
-	// 			displayProgress: false,
-	// 			displayWarp: false
-	// 		});
-	// 		onAudioChange();
-	// 	}
-	// }
-
-	const abcRenderOptions = {
-		tablature: [{ instrument: 'violin' }],
-		responsive: 'resize',
-		add_classes: true
-	};
-
-	const onAudioChange = async () => {
-		parsing = true;
-		if (synthControl) {
-			synthControl.disable(true);
-		}
-		// Q:1/2=60\r\n
-
-		let abcWithTempo = abc;
-		if (abc.indexOf('Q:') === -1) {
-			abcWithTempo = abc.replace('K:', `Q: 1/2=${halfNoteTempo}\r\nK:`)
-		}
-
-		const abcObj = abcjs.renderAbc(renderArea, abcWithTempo, abcRenderOptions);
-		abcjsVisualObj = abcObj[0];
-
-		console.log('miliseconds per measure', abcjsVisualObj.millisecondsPerMeasure());
-		renderArea.style.removeProperty('padding-bottom');
-		renderArea.style.removeProperty('overflow');
-
-		const textElms = renderArea.querySelectorAll(`text[font-family*='Times New Roman']`);
-
-		Array.from(textElms).forEach((elm) => {
-			elm.style.fontFamily = 'Copse';
-		});
-
-		const audioParams = {
-			audioContext: audioContext,
-			visualObj: abcjsVisualObj
-		};
-
-		synth = new abcjs.synth.CreateSynth();
-		synth
-			.init(audioParams)
-			.then((_response) => {
-				// console.log('init complete...');
-				if (synthControl) {
-					// console.log('found synthcontrol');
-					synthControl
-						.setTune(abcjsVisualObj, true, audioParams)
-						.then((arg) => {
-							// console.log('return from setTune:', arg);
-							return synth.prime();
-						})
-						.then((arg) => {
-							// console.log('return from prime:', arg);
-							return Promise.resolve();
-						});
-				}
-			})
-			.catch((error) => console.warn('Audio error:', error))
-			.finally(() => (parsing = false));
-	};
 
 	const handlePlay = async () => {
-		if (abcjs.synth.supportsAudio()) {
-			if (synthControl === undefined) {
-				audioContext = audioContext || newAudioContext();
-				const cursorControl = new AbcCursorControl(renderArea);
-				synthControl = new abcjs.synth.SynthController();
-				synthControl.load('.fake-controls', cursorControl, {
-					displayLoop: false,
-					displayRestart: false,
-					displayPlay: false,
-					displayProgress: false,
-					displayWarp: false
-				});
-				await onAudioChange();
-			}
-			synthControl.play();
-			playing = true;
-		}
+		playFunc();
+		playing = true;
 	};
 
 	const handlePause = () => {
-		if (synthControl) {
-			synthControl.pause();
-		}
+		pauseFunc();
 		playing = false;
 	};
 
 	const handleRewind = () => {
-		if (synthControl) {
-			synthControl.restart();
-		}
+		rewindFunc();
+		playing = false;
 	};
 
 	const handleEdit = () => {
-		showEditor = !showEditor;
+		// showEditor = !showEditor;
 	};
 
 	const handleSave = () => {
-		savedTunes.add(abc);
+		// savedTunes.add(abc);
 	};
 
 	const togglePlayPause = () => (playing ? handlePause() : handlePlay());
@@ -158,17 +47,28 @@
 	const decreaseTempo = async () => {
 		halfNoteTempo = halfNoteTempo - 5;
 		playing = false;
-		onAudioChange();
 	}
 
 	const increaseTempo = async () => {
 		halfNoteTempo = halfNoteTempo + 5;
 		playing = false;
-		onAudioChange();
 	}
 
-	$: if (renderArea) {
-		onAudioChange();
+	const updateControls = ({
+		play: newPlayFunc,
+		pause: newPauseFunc,
+		rewind: newRewindFunc
+	}) => {
+		if (newPlayFunc) {
+			playFunc = newPlayFunc;
+		}
+		if (newPauseFunc) {
+			pauseFunc = newPauseFunc;
+		}
+		if (newRewindFunc) {
+			rewindFunc = newRewindFunc;
+		}
+		parsing = false;
 	}
 </script>
 
@@ -177,7 +77,16 @@
 </svelte:head>
 
 <section class="abc-expanded" class:hide={parsing}>
-	<div id="renderArea" bind:this={renderArea} />
+	<div
+		id="renderArea"
+		use:abcjsCanvas={{
+			abc,
+			updateControls,
+			halfNoteTempo,
+			expanded: true,
+			controlsSelector: '.fake-controls'
+		}}
+	/>
 	<div class="fake-controls" />
 	<div class="controls">
 		<div class="edit-abc-container">
@@ -245,6 +154,8 @@
 		transition: color 200ms linear, filter 200ms linear;
 	}
 	.controls {
+		position: sticky;
+		bottom: calc(0 + env(safe-area-inset-bottom, 0));
 		background-color: var(--light);
 		display: grid;
 		grid-template-columns: repeat(9, 50px);

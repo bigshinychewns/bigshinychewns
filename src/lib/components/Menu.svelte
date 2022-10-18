@@ -16,7 +16,11 @@
 	</div>
 	{#if open}
 		<ul transition:fly={{ duration: 150, x: 500 }}>
-			<li><a href="/shelackybookies">Shelackybookies Chewns</a></li>
+			<li>
+				<a href="/shelackybookies" on:click={handleClick}>
+					Shelackybookies Chewns
+				</a>
+			</li>
 			<li>Saved Chewns</li>
 		</ul>
 	{/if}

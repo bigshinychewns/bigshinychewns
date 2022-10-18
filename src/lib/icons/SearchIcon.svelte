@@ -19,5 +19,7 @@
 		display: block;
 		margin: auto;
 		color: var(--darkest);
+		height: auto;
+		width: 2em;
 	}
 </style>

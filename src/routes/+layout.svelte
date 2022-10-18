@@ -60,6 +60,13 @@
 				font-size: 15px;
 			}
 		}
+
+		@supports(padding:max(0px)) {
+			body {
+				padding-top: min(0vmin, env(safe-area-inset-top));
+				padding-bottom: min(0vmin, env(safe-area-inset-bottom));
+			}
+		}
 	</style>
 </svelte:head>
 
@@ -99,6 +106,7 @@
 		display: grid;
 		grid-template-rows: 4em 1fr;
 		background-color: var(--darkest);
+
 	}
 
 	header {
