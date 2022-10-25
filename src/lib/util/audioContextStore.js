@@ -1,6 +1,6 @@
-import { writable } from 'svelte/store';
+import { readable } from 'svelte/store';
 
-const { subscribe, set, update } = writable(
+const { subscribe } = readable(
   undefined,
   (set) => {
     window.AudioContext = window.AudioContext
@@ -9,12 +9,10 @@ const { subscribe, set, update } = writable(
       || navigator.msAudioContext;
 
     const newAudioContext = new window.AudioContext();
-    // newAudioContext.resume();
     set(newAudioContext);
-
     return () => {
       newAudioContext.close();
-    }
+    };
   }
 );
 

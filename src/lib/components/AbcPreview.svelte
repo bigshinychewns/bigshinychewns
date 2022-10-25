@@ -17,7 +17,7 @@
 	let playFunc = () => {};
 	let pauseFunc = () => {};
 
-	const handlePlay = async () => {
+	const handlePlay = () => {
 		playFunc();
 		playing = true;
 	};

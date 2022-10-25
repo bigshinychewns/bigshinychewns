@@ -1,11 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 	import { encodeForUrl } from '$lib/util/urlParams';
-	import abcjs from 'abcjs';
+	import keyFromAbc from '$lib/util/keyFromAbc';
 
 	export let tune;
 	export let basePath;
-	export let selected;
+	export let selected = '';
 	let element;
 
 	const encodedTuneTitle = encodeForUrl(tune.title);
@@ -20,10 +20,9 @@
 			scrollIntoView();
 		}
 
-		const renderObj = abcjs.renderAbc("*", tune.abc)[0];
-		const keySignature = renderObj.getKeySignature();
-		keyString = `${keySignature.root}${keySignature.mode}`
+		keyString = keyFromAbc(tune.abc);
 	});
+	// $: console.log('selected', selected);
 </script>
 
 <li class="saved-tune" bind:this={element} class:selected={selected == encodedTuneTitle}>

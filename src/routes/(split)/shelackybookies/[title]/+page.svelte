@@ -6,13 +6,12 @@
 	import { page } from '$app/stores';
 	import chewnsBookString from '$lib/shelackybookies';
 	import { decodeFromUrl } from '$lib/util/urlParams';
+	import removeLeadingThe from '$lib/util/removeLeadingThe';
 
 	const chewnsBook = new abcjs.TuneBook(chewnsBookString.tunes);
-	const removeStartingThe = (string) =>
-		string.indexOf('The ') === 0 || string.indexOf('the ') === 0 ? string.slice(4) : string;
 
 	const sortedChewns = chewnsBook.tunes.sort((a, b) =>
-		removeStartingThe(a.title).localeCompare(removeStartingThe(b.title))
+		removeLeadingThe(a.title).localeCompare(removeLeadingThe(b.title))
 	);
 
 	let title, chewnObject;
@@ -24,7 +23,11 @@
 
 <List>
 	{#each sortedChewns as chewn (chewn.title)}
-		<SavedTune tune={chewn} basePath={'/shelackybookies'} selected={$page.params.title} />
+		<SavedTune
+			tune={chewn}
+			basePath={'/shelackybookies'}
+			selected={$page.params.title}
+		/>
 	{/each}
 </List>
 

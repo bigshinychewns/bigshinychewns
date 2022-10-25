@@ -7,15 +7,18 @@
 	import MinusIcon from '$lib/icons/MinusIcon.svelte';
 	import PlusIcon from '$lib/icons/PlusIcon.svelte';
 	import abcjsCanvas from '$lib/util/abcjsCanvas';
+	import LoopIcon from '$lib/icons/LoopIcon.svelte';
 
 	export let abc;
 	export let showEditor;
 
 	let playing = false;
 	let parsing = true;
+	let looping = false;
 	let playFunc = () => {};
 	let pauseFunc = () => {};
 	let rewindFunc = () => {};
+	let toggleLoopFunc = () => {};
 
 	let halfNoteTempo = 80;
 
@@ -47,17 +50,25 @@
 	const decreaseTempo = async () => {
 		halfNoteTempo = halfNoteTempo - 5;
 		playing = false;
+		looping = false;
 	}
 
 	const increaseTempo = async () => {
 		halfNoteTempo = halfNoteTempo + 5;
 		playing = false;
+		looping = false;
+	}
+
+	const toggleLoop = async () => {
+		toggleLoopFunc();
+		looping = !looping;
 	}
 
 	const updateControls = ({
 		play: newPlayFunc,
 		pause: newPauseFunc,
-		rewind: newRewindFunc
+		rewind: newRewindFunc,
+		toggleLoop: newToggleLoop
 	}) => {
 		if (newPlayFunc) {
 			playFunc = newPlayFunc;
@@ -67,6 +78,9 @@
 		}
 		if (newRewindFunc) {
 			rewindFunc = newRewindFunc;
+		}
+		if (newToggleLoop) {
+			toggleLoopFunc = newToggleLoop;
 		}
 		parsing = false;
 	}
@@ -119,6 +133,11 @@
 		<div class="increase-tempo-container">
 			<IconButton onClick={increaseTempo}>
 				<PlusIcon />
+			</IconButton>
+		</div>
+		<div class="toggle-loop-container">
+			<IconButton onClick={toggleLoop}>
+				<LoopIcon --color={looping ? 'red' : null}/>
 			</IconButton>
 		</div>
 		<div class="save-icon-container">

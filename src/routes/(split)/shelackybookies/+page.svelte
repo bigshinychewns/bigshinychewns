@@ -2,21 +2,24 @@
 	import abcjs from 'abcjs';
 	import List from '$lib/components/List.svelte';
 	import SavedTune from '$lib/components/SavedTune.svelte';
-
+	import removeLeadingThe from '$lib/util/removeLeadingThe';
 	import chewnsBookString from '$lib/shelackybookies';
+	import keyFromAbc from '$lib/util/keyFromAbc';
 
 	const chewns = new abcjs.TuneBook(chewnsBookString.tunes);
-	const removeStartingThe = (string) =>
-		string.indexOf('The ') === 0 || string.indexOf('the ') === 0 ? string.slice(4) : string;
 
-	const sortedChewns = chewns.tunes.sort((a, b) =>
-		removeStartingThe(a.title).localeCompare(removeStartingThe(b.title))
-	);
-	console.log('chewns.tunes', chewns.tunes);
+	const sorters = {
+		alphabetical: (a, b) =>
+			removeLeadingThe(a.title).localeCompare(removeLeadingThe(b.title)),
+		key: (a, b) => keyFromAbc(a.abc) < keyFromAbc(b.abc),
+		sets: (a, b) => {}
+	};
+
+	const sortedChewns = chewns.tunes //.sort();
 </script>
 
 <List>
-	{#each sortedChewns as chewn, index (chewn.title)}
-		<SavedTune tune={chewn} basePath={'/shelackybookies'} />
+	{#each sortedChewns as chewn (chewn.title)}
+		<SavedTune tune={chewn} basePath={'/shelackybookies'}/>
 	{/each}
 </List>
