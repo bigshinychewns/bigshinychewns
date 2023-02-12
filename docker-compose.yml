@@ -12,8 +12,10 @@ services:
       - '.:/bigshinychewns'
       - node_modules:/bigshinychewns/node_modules
       - pnpm-store:/bigshinychewns/.pnpm-store
+      - .svelte-kit:/bigshinychewns/.svelte-kit
     environment:
       - VITE_ENVIRONMENT=development
 volumes:
   node_modules:
   pnpm-store:
+  svelte-kit:

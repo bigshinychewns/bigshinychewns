@@ -5,11 +5,8 @@
 	export let tuneVersion = {};
 	export let index;
 
-	let _empty, _search, query, tune, tuneId, hrefBase;
-	$: [_empty, _search, query, tune, tuneId] = $page.url.pathname.split('/');
-	$: hrefBase = `/search/${query}/${tune}`;
-
-	$: selected = tuneId == index + 1;
+	$: [_, tuneName, versionId] = $page.url.pathname.split('/');
+	$: selected = versionId === tuneVersion.setting_id;
 	let element;
 
 	const scrollIntoView = () => {
@@ -24,12 +21,12 @@
 </script>
 
 <li bind:this={element} class:selected class="tune-version">
-	<a href={`${hrefBase}/${index + 1}`}>
+	<a href={`/${tuneName}/${tuneVersion.setting_id}`}>
 		<span>
-			{`${index + 1}: ${tuneVersion.key}`}
+			{`${index + 1}: ${tuneVersion.mode}`}
 		</span>
 		<span class="muted">
-			{tuneVersion.id}
+			{tuneVersion.setting_id}
 		</span>
 	</a>
 </li>

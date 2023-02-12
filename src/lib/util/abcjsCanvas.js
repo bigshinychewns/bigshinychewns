@@ -21,9 +21,15 @@ const abcjsCanvas = (node, options) => {
 
 	const renderAbc = (options) => {
 		let { abc, expanded } = options;
+
+		/** @type {ABCjs.AbcVisualParams} */
 		let abcRenderOptions = { responsive: 'resize' };
 		if (expanded) {
-			abcRenderOptions.tablature = [{ instrument: 'violin' }];
+			/** @ts-ignore */
+			abcRenderOptions.tablature = [{
+				instrument: 'guitar',
+				tuning: ["G", "D,", "A,", "E"],
+			}];
 			abcRenderOptions.add_classes = true;
 		}
 
@@ -107,7 +113,7 @@ const abcjsCanvas = (node, options) => {
 			} else {
 				updatedControls = {
 					play: synth.start,
-					pause: synth.stopj,
+					pause: synth.stop,
 				};
 			}
 			options.updateControls(updatedControls);

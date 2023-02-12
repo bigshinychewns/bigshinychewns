@@ -3,92 +3,31 @@
 	import IconButton from '$lib/components/IconButton.svelte';
 	import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
 
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
-
-	let url_path_segments = [];
-	let showBackButton = false;
-
-	$: url_path_segments = $page.url.pathname.split('/');
-
-	$: showBackButton = url_path_segments.length > 3;
-
-	const handleClick = () => {
-		if (url_path_segments.length > 0) {
-			goto(url_path_segments.slice(0, -1).join('/'));
-		}
-	};
+	import '$lib/styles/css-reset.css';
+	import '$lib/styles/fonts.css';
 </script>
 
-<svelte:head>
-	<link href="/styles/css-reset.css" rel="stylesheet" />
-	<style>
-		@font-face {
-			font-family: 'Copse';
-			font-style: normal;
-			font-weight: 500;
-			src: url('/fonts/Copse-Regular.ttf') format('truetype');
-		}
-
-		@font-face {
-			font-family: 'Sherwood';
-			font-style: normal;
-			font-weight: 500;
-			src: url('/fonts/Sherwood.ttf') format('truetype');
-		}
-
-		@media screen and (max-width: 475px) {
-			body {
-				font-size: 11px;
-			}
-		}
-
-		@media screen and (min-width: 475px) and (max-width: 550px) {
-			body {
-				font-size: 13px;
-			}
-		}
-
-		@media screen and (min-width: 900px) {
-			body {
-				font-size: 20px;
-			}
-		}
-
-		@media screen and (min-width: 550px) and (max-width: 900px) {
-			body {
-				font-size: 15px;
-			}
-		}
-
-		@supports(padding:max(0px)) {
-			body {
-				padding-top: min(0vmin, env(safe-area-inset-top));
-				padding-bottom: min(0vmin, env(safe-area-inset-bottom));
-			}
-		}
-	</style>
-</svelte:head>
-
-<header>
-	<nav>
-		<div class="left">
-			{#if showBackButton}
-				<IconButton onClick={handleClick}>
-					<ChevronLeftIcon --color="var(--light)" />
-				</IconButton>
-			{/if}
+<section class="container">
+	<header>
+		<div class="back">
+			<IconButton>
+				<ChevronLeftIcon --color="var(--light)" />
+			</IconButton>
 		</div>
-		<h1>Big Shiny Chewns</h1>
-		<div class="right">
+		<div class="logo">
+			<a href="/">
+				<h1>Big Shiny Chewns</h1>
+			</a>
+		</div>
+		<div class="menu">
 			<Menu />
 		</div>
-	</nav>
-</header>
-<slot />
+	</header>
+	<slot/>
+</section>
 
 <style>
-	:global(html) {
+	:global(body) {
 		--darkest: hsl(0, 0%, 15%);
 		--dark: hsl(0, 0%, 35%);
 		--medium: hsl(0, 0%, 50%);
@@ -101,36 +40,34 @@
 		font-family: 'Copse';
 	}
 
-	:global(body) {
-		min-height: 100vh;
+	section {
 		display: grid;
-		grid-template-rows: 4em 1fr;
-		background-color: var(--darkest);
-
+		grid-template-columns: 1em 1fr 1em;
+		grid-template-rows: 4em 1fr 1em;
+		gap: 0px 0px;
+		grid-auto-flow: row;
+		grid-template-areas:
+			'. header .'
+			'. main .'
+			'. . .';
+		min-height: inherit;
+		max-height: 100vh;
 	}
 
 	header {
-		display: flex;
-		background-color: var(--darkest);
-		height: 4em;
-		max-width: 100vw;
-	}
-
-	nav {
-		flex: 1;
-		padding-left: 1em;
-		padding-right: 1em;
 		display: grid;
-		place-items: center;
-		grid-template-columns: 5fr 20fr 50fr 20fr 5fr;
-		justify-items: stretch;
+		grid-template-columns: 4em 1fr 4em;
 		grid-template-rows: 1fr;
-		grid-template-areas: 'backbutton spacerleft title spacerright forwardbutton';
+		gap: 0px 0px;
+		grid-auto-flow: row;
+		grid-template-areas: 'back logo menu';
+		grid-area: header;
+		place-items: center;
 	}
 
 	h1 {
 		white-space: nowrap;
-		grid-area: title;
+		grid-area: logo;
 		text-align: center;
 		font-family: 'Sherwood';
 		font-size: 2em;
@@ -142,13 +79,57 @@
 			0.15625em 0.15625em 0 var(--lightest);
 	}
 
-	.left {
-		grid-area: backbutton;
+	.back {
+		grid-area: back;
 	}
 
-	.right {
-		grid-area: forwardbutton;
-		height: 100%;
-		width: 100%;
+	.menu {
+		grid-area: menu;
 	}
+
+	a {
+		color: var(--darkest);
+		text-decoration: none;
+	}
+
+	:global(body > div.root) {
+		display: flex;
+		min-width: 100vw;
+		min-height: 100vh;
+	}
+	:global(body) {
+		background-color: var(--darkest);
+	}
+
+
+	@media screen and (max-width: 475px) {
+		:global(body) {
+			font-size: 11px;
+		}
+	}
+
+	@media screen and (min-width: 475px) and (max-width: 550px) {
+		:global(body) {
+			font-size: 13px;
+		}
+	}
+
+	@media screen and (min-width: 900px) {
+		:global(body) {
+			font-size: 20px;
+		}
+	}
+
+	@media screen and (min-width: 550px) and (max-width: 900px) {
+		:global(body) {
+			font-size: 15px;
+		}
+	}
+
+	/* @supports(padding:max(0px)) {
+		:global(body) {
+			padding-top: min(0vmin, env(safe-area-inset-top));
+			padding-bottom: min(0vmin, env(safe-area-inset-bottom));
+		}
+	} */
 </style>

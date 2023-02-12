@@ -12,7 +12,8 @@ const scrollShadow = (node) => {
 	const handleScrollShadows = () => {
 		const needsShadowTop = node.scrollTop !== 0;
 		const needsShadowBottom =
-			node.scrollHeight - node.scrollTop !== node.clientHeight;
+			node.scrollHeight - node.scrollTop > node.clientHeight;
+
 		if (needsShadowTop && needsShadowBottom) {
 			node.style.boxShadow = `${shadowTop}, ${shadowBottom}`;
 		} else if (needsShadowTop) {

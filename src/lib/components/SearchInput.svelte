@@ -1,18 +1,13 @@
 <script>
-	import { goto } from '$app/navigation';
 	import SearchIcon from '$lib/icons/SearchIcon.svelte';
-	import { encodeForQuery } from '$lib/util/urlParams';
+	import { page } from '$app/stores';
 
-	export let query = '';
-	const handleSearch = () => {
-		const queryUrl = encodeForQuery(query);
-		goto(`/search/${queryUrl}/`);
-	};
+	export let submitted = false;
 </script>
 
 <section class="search-input">
-	<form on:submit|preventDefault={handleSearch}>
-		<input type="text" name="q" bind:value={query} />
+	<form method="GET" action="/" on:submit={() => submitted = true}>
+		<input type="text" name="q" value={$page.url.searchParams.get('q')}/>
 		<button type="submit">
 			<SearchIcon />
 		</button>
@@ -34,6 +29,7 @@
 	form {
 		display: flex;
 		grid-template-columns: 1fr 3em;
+		height: 2.5em;
 	}
 
 	button {

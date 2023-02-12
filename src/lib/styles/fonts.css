@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Copse';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/Copse-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Sherwood';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/Sherwood.ttf') format('truetype');
+}

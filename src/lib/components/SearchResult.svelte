@@ -1,20 +1,14 @@
 <script>
-	import { page } from '$app/stores';
 	import { encodeForUrl } from '$lib/util/urlParams';
 
-	export let result = {};
-	const { name, type, url, alias, id } = result;
-
-	const nameUrl = encodeForUrl(name);
+	export let result = {target: ''};
+	$: nameUrl = encodeForUrl(result.target);
 </script>
 
 <li class="search-result">
-	<a href={`${$page.url.pathname}/${id}-${nameUrl}`}>
+	<a href={`/${nameUrl}`}>
 		<span>
-			{name}
-		</span>
-		<span class="muted">
-			{type}
+			{result.target}
 		</span>
 	</a>
 </li>
@@ -34,12 +28,6 @@
 
 	span {
 		color: var(--darkest);
-	}
-
-	.muted {
-		font-size: 0.75em;
-		color: var(--dark);
-		padding-left: 0.25em;
 	}
 
 	a {

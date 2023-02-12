@@ -2,13 +2,13 @@
 	import SearchResult from '$lib/components/SearchResult.svelte';
 	import scrollShadow from '$lib/util/scrollShadow';
 
-	export let results;
+	export let results = [];
 </script>
 
 <section class="search-results" use:scrollShadow>
-	{#if results.tunes}
+	{#if results.length}
 		<ul>
-			{#each results.tunes as result (result.id)}
+			{#each results as result}
 				<SearchResult {result} />
 			{/each}
 		</ul>
@@ -22,11 +22,8 @@
 		background-color: var(--light);
 		display: grid;
 		font-size: 1rem;
-	}
-	ul {
-		list-style-type: none;
-		height: 100%;
+		max-height: calc(100vh - 10.5em);  /* 5em for logo + 6em for searchInput */
 		overflow-y: scroll;
-		background-color: hsla(0, 100%, 100%, 0);
+		scrollbar-width: none;
 	}
 </style>

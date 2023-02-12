@@ -1,0 +1,12 @@
+{
+	"HOSTNAME": "a1e5ff9055c4",
+	"REMOTE_CONTAINERS_IPC": "/tmp/vscode-remote-containers-ipc-9460cb43d108dcdd3f9e6c66b4c15495be03320a.sock",
+	"YARN_VERSION": "1.22.19",
+	"HOME": "/root",
+	"REMOTE_CONTAINERS_SOCKETS": "[\"/tmp/vscode-ssh-auth-9460cb43d108dcdd3f9e6c66b4c15495be03320a.sock\"]",
+	"VITE_ENVIRONMENT": "development",
+	"SHLVL": "1",
+	"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+	"NODE_VERSION": "18.13.0",
+	"_": "/bin/cat"
+}

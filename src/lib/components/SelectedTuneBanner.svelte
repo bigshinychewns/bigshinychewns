@@ -9,7 +9,7 @@
 <style>
 	section {
 		background-color: var(--light);
-		font-size: 2rem;
+		font-size: 1.5rem;
 		color: var(--darkest);
 		width: 100%;
 		user-select: none;
@@ -17,6 +17,12 @@
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;
+		height: 100%;
+	}
+
+	span {
+		overflow-x: hidden;
+		white-space: nowrap;
 	}
 
 	.muted {

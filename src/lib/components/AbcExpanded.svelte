@@ -8,9 +8,13 @@
 	import PlusIcon from '$lib/icons/PlusIcon.svelte';
 	import abcjsCanvas from '$lib/util/abcjsCanvas';
 	import LoopIcon from '$lib/icons/LoopIcon.svelte';
+	import generateAbc from '$lib/util/generateAbc';
+	import '$lib/styles/abcjs.css';
 
-	export let abc;
+	export let tune;
 	export let showEditor;
+
+	$: abc = generateAbc(tune);
 
 	let playing = false;
 	let parsing = true;
@@ -86,11 +90,7 @@
 	}
 </script>
 
-<svelte:head>
-	<link href="/styles/abcjs.css" rel="stylesheet" />
-</svelte:head>
-
-<section class="abc-expanded" class:hide={parsing}>
+<main class="abc-expanded" class:hide={parsing}>
 	<div
 		id="renderArea"
 		use:abcjsCanvas={{
@@ -100,9 +100,10 @@
 			expanded: true,
 			controlsSelector: '.fake-controls'
 		}}
-	/>
-	<div class="fake-controls" />
+	>
+	</div>
 	<div class="controls">
+		<div class="fake-controls hide" />
 		<div class="edit-abc-container">
 			<IconButton onClick={handleEdit}>
 				<span class="abc-button">Abc</span>
@@ -146,67 +147,45 @@
 			</IconButton>
 		</div>
 	</div>
-</section>
+</main>
 
 <style>
-	section {
+	main {
+		grid-area: main;
 		display: grid;
-		grid-template-rows: calc(100vh - 9em) 4em;
-		width: calc(100vw);
-		border-top: 1em solid var(--dark);
-		border-right: 1em solid var(--dark);
-		border-left: 1em solid var(--dark);
+		grid-template-rows: 1fr 4em;
+		padding: 1em;
+		background-color: var(--dark);
 	}
+
 	#renderArea {
 		background-color: var(--darkest);
 		color: var(--lightest);
 		overflow-y: scroll;
-		height: calc(100vh - 9em);
-		width: calc(100vw - 2em) !important;
+		scrollbar-width: none;
 	}
+
 	#renderArea :global(.highlight) {
 		--highlight-color: red;
 		color: var(--highlight-color);
 		filter: drop-shadow(0px 0px 3px var(--highlight-color));
 	}
+
 	#renderArea :global(g) {
 		transition: color 200ms linear, filter 200ms linear;
 	}
+
 	.controls {
-		position: sticky;
-		bottom: calc(0 + env(safe-area-inset-bottom, 0));
 		background-color: var(--light);
-		display: grid;
-		grid-template-columns: repeat(9, 50px);
-		place-items: center;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
+
 	.hide {
 		display: none;
 	}
-	.fake-controls {
-		display: none;
-	}
-	.edit-abc-container {
-		grid-area: 1 / 1 / 1 / 1;
-	}
-	.rewind-container {
-		grid-area: 1 / 3 / 1 / 3;
-	}
-	.play-pause-container {
-		grid-area: 1 / 5 / 1 / 5;
-	}
-	.decrease-tempo-container {
-		grid-area: 1 / 7 / 1 / 7;
-	}
-	.current-tempo-container {
-		grid-area: 1 / 8 / 1 / 8;
-	}
-	.increase-tempo-container {
-		grid-area: 1 / 9 / 1 / 9;
-	}
-	.save-icon-container {
-		grid-area: 1 / 10 / 1 / 10;
-	}
+
 	.abc-button {
 		display: grid;
 		place-items: center;

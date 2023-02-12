@@ -5,12 +5,12 @@
 	import PauseIcon from '$lib/icons/PauseIcon.svelte';
 	import { page } from '$app/stores';
 	import abcjsCanvas from '$lib/util/abcjsCanvas';
+	import generateAbc from '$lib/util/generateAbc';
+	import '$lib/styles/abcjs.css';
 
-	let _empty, origin, query, tune, tuneId, hrefBase;
-	$: [_empty, origin, query, tune, tuneId] = $page.url.pathname.split('/');
-	$: hrefBase = `/${origin}/${query}/${tune}/${tuneId}`;
+	export let tune;
 
-	export let abc;
+	$: abc = generateAbc(tune);
 
 	let playing = false;
 	let parsing = true;
@@ -40,54 +40,49 @@
 	}
 </script>
 
-<svelte:head>
-	<link href="/styles/abcjs.css" rel="stylesheet" />
-</svelte:head>
-
-<section class="abc-preview" class:parsing>
-	<div class="">
-		<div
-			id="render-area"
-			use:abcjsCanvas={{
-				abc: abc,
-				updateControls: updateControls,
-			}}
-		/>
+<div class="preview" class:parsing>
+	<div
+		id="render-area"
+		use:abcjsCanvas={{
+			abc: abc,
+			updateControls: updateControls,
+		}}
+	/>
+</div>
+<div class="controls">
+	<div class="play-pause-container">
+		<IconButton onClick={handleClick}>
+			{#if playing}
+				<PauseIcon />
+			{:else}
+				<PlayIcon />
+			{/if}
+		</IconButton>
 	</div>
-	<div class="controls">
-		<div class="play-pause-container">
-			<IconButton onClick={handleClick}>
-				{#if playing}
-					<PauseIcon />
-				{:else}
-					<PlayIcon />
-				{/if}
-			</IconButton>
-		</div>
-		<div class="expand-container">
-			<a href={`${hrefBase}/expanded`}>
-				<ArrowsExpandIcon />
-			</a>
-		</div>
+	<div class="expand-container">
+		<a href={`${$page.url.pathname}/expanded`}>
+			<ArrowsExpandIcon />
+		</a>
 	</div>
-</section>
+</div>
 
 <style>
-	section {
-		display: grid;
-		grid-template-rows: 1fr 4em;
-		height: 100%;
+
+	.preview {
+		grid-area: preview;
 	}
+	.controls {
+		grid-area: controls;
+	}
+
 	#render-area {
 		background-color: var(--darkest);
 		color: var(--lightest);
 		overflow-y: scroll;
 		height: 100%;
-		max-width: calc(100vw - 4em);
 	}
+
 	.controls {
-		position: sticky;
-		bottom: calc(0 + env(safe-area-inset-bottom, 0));
 		display: grid;
 		grid-auto-columns: 1fr;
 		background-color: var(--light);
@@ -102,8 +97,5 @@
 	}
 	.expand-container {
 		grid-area: 1 / 9 / 1 / 9;
-	}
-	a {
-		color: var(--darkest);
 	}
 </style>

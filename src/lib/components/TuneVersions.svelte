@@ -1,24 +1,16 @@
 <script>
-	import fsm from '$lib/util/fsm';
-	import { selectedTuneVersions, selectedTuneVersion, selectedTune } from '$lib/util/stores';
 	import scrollShadow from '$lib/util/scrollShadow';
+	import TuneVersion from './TuneVersion.svelte';
+
+	/** @type {Session.Tune[]}*/
+	export let tuneVersions = [];
+	export let selectedVersion;
 </script>
 
-<section class="tune-versions" use:scrollShadow>
+<section class="tune-versions" class:half={selectedVersion} use:scrollShadow>
 	<ul>
-		{#each $selectedTuneVersions as tuneVersion, index (tuneVersion.id)}
-			<li class:selected={$selectedTuneVersion?.id === tuneVersion.id}>
-				<a href={`/${tuneVersion.id}`}>
-					<!-- <button on:click={() => fsm.selectTuneVersion(tuneVersion, index + 1)}> -->
-					<span>
-						{`${index + 1}: ${tuneVersion.key.substring(0, 4)}`}
-					</span>
-					<span class="muted">
-						{`${tuneVersion.id}`}
-					</span>
-					<!-- </button> -->
-				</a>
-			</li>
+		{#each tuneVersions as tuneVersion, index (tuneVersion.setting_id)}
+			<TuneVersion { index } { tuneVersion } />
 		{/each}
 	</ul>
 </section>
@@ -27,31 +19,19 @@
 	section {
 		background-color: var(--light);
 		overflow-y: scroll;
+		scrollbar-width: none;
+		max-height: calc(100vh - 14em);
 	}
+
+	@media screen and (max-width: 700px) {
+		section.half {
+			max-height: calc(calc(calc(100vh - 5em) / 2) - 8em);
+		}
+	}
+
 	ul {
 		font-size: 1.5em;
 		list-style-type: none;
 		height: 100%;
-		scrollbar-width: none;
-	}
-	li {
-		padding: 8px;
-		display: grid;
-	}
-	li:not(:first-child) {
-		border-top: 2px solid var(--dark);
-		overflow-x: hidden;
-		white-space: nowrap;
-	}
-	.selected {
-		background-color: var(--darkest);
-	}
-	.selected button {
-		color: var(--light);
-	}
-	.muted {
-		font-size: 0.5em;
-		color: var(--dark);
-		padding-left: 5px;
 	}
 </style>
