@@ -1,9 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@formkit/auto-animate': 1.0.0-beta.1
-  '@sveltejs/adapter-auto': next
-  '@sveltejs/adapter-node': next
+  '@sveltejs/adapter-auto': ^2.0.0
+  '@sveltejs/adapter-node': ^1.1.8
   '@sveltejs/kit': ^1.5.5
   '@typescript-eslint/eslint-plugin': ^5.51.0
   '@typescript-eslint/parser': ^5.51.0
@@ -24,9 +23,8 @@ specifiers:
   vite: ^4.1.1
 
 devDependencies:
-  '@formkit/auto-animate': 1.0.0-beta.1
-  '@sveltejs/adapter-auto': 1.0.0-next.91_@sveltejs+kit@1.5.5
-  '@sveltejs/adapter-node': 1.0.0-next.106_@sveltejs+kit@1.5.5
+  '@sveltejs/adapter-auto': 2.0.0_@sveltejs+kit@1.5.5
+  '@sveltejs/adapter-node': 1.1.8_@sveltejs+kit@1.5.5
   '@sveltejs/kit': 1.5.5_svelte@3.55.1+vite@4.1.1
   '@typescript-eslint/eslint-plugin': 5.51.0_hvob2mnilzlwxjztadamqigvwy
   '@typescript-eslint/parser': 5.51.0_jofidmxrjzhj7l6vknpw5ecvfe
@@ -283,18 +281,6 @@ packages:
       - supports-color
     dev: true
 
-  /@formkit/auto-animate/1.0.0-beta.1:
-    resolution: {integrity: sha512-I3OWOBaPZKSJL4bsooXI8kC3q7bcgibD2oML0P/Lir6MnbvUe/0/7EH8br024juvM/Ulm9C9xGx9CJUQYrOWSA==}
-    peerDependencies:
-      react: ^16.8.0
-      vue: ^3.0.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-      vue:
-        optional: true
-    dev: true
-
   /@humanwhocodes/config-array/0.5.0:
     resolution: {integrity: sha512-FagtKFz74XrTl7y6HCzQpwDfXP0yhxe9lHLD1UZxjvZIcbyRz8zTFF/yYNfSfzU414eDwZ1SrO0Qvtyf+wFMQg==}
     engines: {node: '>=10.10.0'}
@@ -351,8 +337,8 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
-  /@rollup/plugin-commonjs/23.0.7_rollup@3.15.0:
-    resolution: {integrity: sha512-hsSD5Qzyuat/swzrExGG5l7EuIlPhwTsT7KwKbSCQzIcJWjRxiimi/0tyMYY2bByitNb3i1p+6JWEDGa0NvT0Q==}
+  /@rollup/plugin-commonjs/24.0.1_rollup@3.15.0:
+    resolution: {integrity: sha512-15LsiWRZk4eOGqvrJyu3z3DaBu5BhXIMeWnijSRvd8irrrg9SHpQ1pH+BUK4H6Z9wL9yOxZJMTLU+Au86XHxow==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0
@@ -369,8 +355,8 @@ packages:
       rollup: 3.15.0
     dev: true
 
-  /@rollup/plugin-json/5.0.2_rollup@3.15.0:
-    resolution: {integrity: sha512-D1CoOT2wPvadWLhVcmpkDnesTzjhNIQRWLsc3fA49IFOP2Y84cFOOJ+nKGYedvXHKUsPeq07HR4hXpBBr+CHlA==}
+  /@rollup/plugin-json/6.0.0_rollup@3.15.0:
+    resolution: {integrity: sha512-i/4C5Jrdr1XUarRhVu27EEwjt4GObltD7c+MkCIpO2QIbojw8MUs+CCTqOphQi3Qtg1FLmYt+l+6YeoIf51J7w==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^1.20.0||^2.0.0||^3.0.0
@@ -415,22 +401,22 @@ packages:
       rollup: 3.15.0
     dev: true
 
-  /@sveltejs/adapter-auto/1.0.0-next.91_@sveltejs+kit@1.5.5:
-    resolution: {integrity: sha512-U57tQdzTfFINim8tzZSARC9ztWPzwOoHwNOpGdb2o6XrD0mEQwU9DsII7dBblvzg+xCnmd0pw7PDtXz5c5t96w==}
+  /@sveltejs/adapter-auto/2.0.0_@sveltejs+kit@1.5.5:
+    resolution: {integrity: sha512-b+gkHFZgD771kgV3aO4avHFd7y1zhmMYy9i6xOK7m/rwmwaRO8gnF5zBc0Rgca80B2PMU1bKNxyBTHA14OzUAQ==}
     peerDependencies:
-      '@sveltejs/kit': ^1.0.0-next.587
+      '@sveltejs/kit': ^1.0.0
     dependencies:
       '@sveltejs/kit': 1.5.5_svelte@3.55.1+vite@4.1.1
       import-meta-resolve: 2.2.1
     dev: true
 
-  /@sveltejs/adapter-node/1.0.0-next.106_@sveltejs+kit@1.5.5:
-    resolution: {integrity: sha512-HByOyp9Y9PUWpdk9Yj5OtUGASFiDT5Fly+YrEtFOsm/TQBbcHKS/L0oNPRB6H1Qw9il2QMfbLs7iuaOjTsxg1A==}
+  /@sveltejs/adapter-node/1.1.8_@sveltejs+kit@1.5.5:
+    resolution: {integrity: sha512-jxvj+E24SziP/0IhNWDxNeleC/S5yeEMhAYKuuKIyygw7C8NjyrbwUEizBjn4sb/XyGfJWw1/yoXqtCANoyl4g==}
     peerDependencies:
-      '@sveltejs/kit': ^1.0.0-next.587
+      '@sveltejs/kit': ^1.0.0
     dependencies:
-      '@rollup/plugin-commonjs': 23.0.7_rollup@3.15.0
-      '@rollup/plugin-json': 5.0.2_rollup@3.15.0
+      '@rollup/plugin-commonjs': 24.0.1_rollup@3.15.0
+      '@rollup/plugin-json': 6.0.0_rollup@3.15.0
       '@rollup/plugin-node-resolve': 15.0.1_rollup@3.15.0
       '@sveltejs/kit': 1.5.5_svelte@3.55.1+vite@4.1.1
       rollup: 3.15.0
