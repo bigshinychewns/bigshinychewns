@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import abcjs from 'abcjs';
 	import List from '$lib/components/List.svelte';
 	import SavedTune from '$lib/components/SavedTune.svelte';
@@ -6,7 +6,6 @@
 	import { page } from '$app/stores';
 	import chewnsBookString from '$lib/shelackybookies';
 	import { decodeFromUrl } from '$lib/util/urlParams';
-	import removeLeadingThe from '$lib/util/removeLeadingThe';
 
 	const chewnsBook = new abcjs.TuneBook(chewnsBookString.tunes);
 
@@ -37,4 +36,5 @@
 			<AbcPreview abc={chewnObject.abc} />
 		{/key}
 	</section>
-{/if}
+{/if} -->
+<p>error</p>
