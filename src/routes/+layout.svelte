@@ -7,9 +7,12 @@
 	import '$lib/styles/css-reset.css';
 	import '$lib/styles/fonts.css';
 
+	let height = 0;
 	onMount(() => {
 		const appHeight = () => {
 			const doc = document.documentElement;
+			height = window.innerHeight;
+			console.log(`--app-height: ${window.innerHeight}px`);
 			doc.style.setProperty("-—app-height", `${window.innerHeight}px`);
 		};
 		window.addEventListener("resize", appHeight);
@@ -29,7 +32,7 @@
 		</div>
 		<div class="logo">
 			<a href="/">
-				<h1>Big Shiny Chewns</h1>
+				<h1>{height}</h1>
 			</a>
 		</div>
 		<div class="menu">
