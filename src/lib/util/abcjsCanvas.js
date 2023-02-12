@@ -11,7 +11,7 @@ const defaultOptions = {
 };
 
 const abcjsCanvas = (node, options) => {
-	const optionsWithDefaults = {...defaultOptions, ...options}
+	const optionsWithDefaults = { ...defaultOptions, ...options }
 
 	let audioContext;
 
@@ -26,10 +26,7 @@ const abcjsCanvas = (node, options) => {
 		let abcRenderOptions = { responsive: 'resize' };
 		if (expanded) {
 			/** @ts-ignore */
-			abcRenderOptions.tablature = [{
-				instrument: 'guitar',
-				tuning: ["G", "D,", "A,", "E"],
-			}];
+			abcRenderOptions.tablature = [{ instrument: 'violin' }];
 			abcRenderOptions.add_classes = true;
 		}
 
@@ -148,7 +145,7 @@ const abcjsCanvas = (node, options) => {
 
 	return {
 		update(options) {
-			let abcObj = renderAbc({...defaultOptions, ...options});
+			let abcObj = renderAbc({ ...defaultOptions, ...options });
 			exportControlFunctions(abcObj, options);
 		},
 		destroy() {
