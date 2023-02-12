@@ -26,7 +26,7 @@
       grid-auto-flow: row;
       row-gap: 1em;
       grid-template-columns: unset;
-      height: calc(100vh - 9em);
+      height: calc(var(--app-height) - 9em);
       min-width: 0;
     }
   }

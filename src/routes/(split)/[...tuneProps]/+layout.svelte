@@ -57,11 +57,11 @@
 		}
 
 		main.selected .left, main.selected .right {
-			max-height: calc(calc(100vh - 5em) / 2);
+			max-height: calc(calc(var(--app-height) - 5em) / 2);
 		}
 
 		.left, .right {
-			max-height: calc(100vh - 5em);
+			max-height: calc(var(--app-height) - 5em);
 		}
 	}
 
@@ -72,14 +72,6 @@
 			grid-template-areas: 'left right';
 			gap: 0em 1em;
 		}
-
-		/* .left {
-			max-height: calc(100vh - 5em);
-		} */
-
-		/* .results {
-			max-height: calc(100vh - 5em);
-		} */
 	}
 
 	main {
@@ -87,7 +79,7 @@
 		grid-auto-flow: row;
 		grid-area: main;
 		background-color: var(--dark);
-		max-height: calc(100vh - 5em);
+		max-height: calc(var(--app-height) - 5em);
 		padding: 1em;
 	}
 

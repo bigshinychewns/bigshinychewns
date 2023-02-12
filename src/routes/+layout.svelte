@@ -2,9 +2,22 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import IconButton from '$lib/components/IconButton.svelte';
 	import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
+	import { onMount } from 'svelte';
 
 	import '$lib/styles/css-reset.css';
 	import '$lib/styles/fonts.css';
+
+	onMount(() => {
+		const appHeight = () => {
+			const doc = document.documentElement;
+			doc.style.setProperty("-—app-height", `${window.innerHeight}px`);
+		};
+		window.addEventListener("resize", appHeight);
+		appHeight();
+		return () => {
+			window.removeEventListener("resize", appHeight);
+		};
+	});
 </script>
 
 <section class="container">
@@ -27,7 +40,7 @@
 </section>
 
 <style>
-	:global(body) {
+	:root {
 		--darkest: hsl(0, 0%, 15%);
 		--dark: hsl(0, 0%, 35%);
 		--medium: hsl(0, 0%, 50%);
@@ -36,6 +49,7 @@
 		--shadow-size: 1em;
 		--shadow-blur-size: -0.75em;
 		--shadow-color: hsla(0, 0%, 15%, 0.7);
+		--app-height: 100vh;
 
 		font-family: 'Copse';
 	}
@@ -51,7 +65,7 @@
 			'. main .'
 			'. . .';
 		min-height: inherit;
-		max-height: 100vh;
+		max-height: var(--app-height);
 	}
 
 	header {
@@ -95,7 +109,7 @@
 	:global(body > div.root) {
 		display: flex;
 		min-width: 100vw;
-		min-height: 100vh;
+		min-height: var(--app-height);
 	}
 	:global(body) {
 		background-color: var(--darkest);
