@@ -9,7 +9,6 @@
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 
-	$: console.log('new data:', data);
 	let submitted = false;
 </script>
 
