@@ -23,10 +23,8 @@ export async function GET({ url, setHeaders }) {
 		readStream.pipe(parseStream);
 	});
 
-	console.log('begin search for: ', name);
 	/** @type {Session.Tune[]} */
 	const tuneVersions = await findTune;
-	console.log('tuneVersions:', tuneVersions);
 	if (!tuneVersions) {
 		throw error(404, {
 			message: 'Tune not found'
