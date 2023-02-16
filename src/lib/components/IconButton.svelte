@@ -15,5 +15,6 @@
 	button {
 		display: grid;
 		place-items: center;
+		height: (var(--height, inherit));
 	}
 </style>

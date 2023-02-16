@@ -1,5 +1,5 @@
 import fuzzysort from 'fuzzysort';
-import tuneTitles from '$lib/titlesFixed.json';
+import tuneTitles from '$lib/titles.json';
 import { decodeFromUrl } from '$lib/util/urlParams';
 import { error } from '@sveltejs/kit';
 import bigJson from 'big-json';
@@ -28,7 +28,7 @@ export async function load({ url, params }) {
 		const tuneName = decodeFromUrl(tuneNameEncoded);
 
 		const findTune = new Promise((resolve) => {
-			const readStream = fs.createReadStream('src/lib/tunesByTitleFixed.json');
+			const readStream = fs.createReadStream('src/lib/tunesByTitle.json');
 			const parseStream = bigJson.createParseStream();
 
 			parseStream.on('data', (tunesByTitle) => {

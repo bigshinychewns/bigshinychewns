@@ -5,43 +5,55 @@
 	import SelectedTuneBanner from '$lib/components/SelectedTuneBanner.svelte';
 	import AbcPreview from '$lib/components/AbcPreview.svelte';
 	import TuneVersions from '$lib/components/TuneVersions.svelte';
+	import { searchResults, searchState, searchQuery } from '$lib/util/searchStore';
+	import { getTuneStore } from '$lib/util/tunesStore';
 
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 
-	let submitted = false;
+	$: tuneStore = getTuneStore(data.tuneName);
 </script>
 
-<main class:selected={data.tuneVersions?.length}>
+<main class:selected={data.tuneName}>
 	<section class="left">
-		<section class="search">
-			<SearchInput bind:submitted />
-		</section>
-		{#if data.tuneVersions?.length}
-			<section class="selected-tune">
-				<SelectedTuneBanner tune={data.tuneVersions[0]} />
+			<section class="search">
+				<SearchInput />
 			</section>
+			{#if data.tuneName}
+				{#await tuneStore.load()}
+					<section class="results">
+						<Spinner />
+					</section>
+				{:then}
+					<section class="selected-tune">
+						<SelectedTuneBanner tune={$tuneStore[0]} />
+					</section>
+					<section class="results">
+						<TuneVersions
+							tuneVersions={$tuneStore}
+							selectedVersion={data.tuneVersion}
+						/>
+					</section>
+				{/await}
+			{:else}
 			<section class="results">
-				<TuneVersions
-					tuneVersions={data.tuneVersions}
-					selectedVersion={data.selectedVersion}
-				/>
+				{#if $searchState.isLoading && !$tuneStore}
+					<Spinner />
+				{/if}
+				{#if $searchState.isLoaded && $searchQuery.length > 0}
+					<SearchResults results={$searchResults} />
+				{/if}
 			</section>
-		{:else}
-		<section class="results">
-			{#if submitted && !data.searchResults && !data.tuneVersions}
-				<Spinner />
 			{/if}
-			{#if data.searchResults}
-				<SearchResults results={data.searchResults} />
-			{/if}
-		</section>
-		{/if}
 	</section>
-	{#if data.selectedVersion}
-		<section class="right">
-			<AbcPreview tune={data.selectedVersion} />
-		</section>
+	{#if data.tuneVersion}
+		{#await tuneStore.load()}
+			<Spinner />
+		{:then}
+			<section class="right">
+				<AbcPreview tune={$tuneStore.find(t => t.setting_id == data.tuneVersion)} />
+			</section>
+		{/await}
 	{/if}
 </main>
 
@@ -57,11 +69,11 @@
 		}
 
 		main.selected .left, main.selected .right {
-			max-height: calc(calc(var(--app-height) - 5em) / 2);
+			max-height: calc(calc(100vh - 5em) / 2);
 		}
 
 		.left, .right {
-			max-height: calc(var(--app-height) - 5em);
+			max-height: calc(100vh - 5em);
 		}
 	}
 
@@ -79,7 +91,7 @@
 		grid-auto-flow: row;
 		grid-area: main;
 		background-color: var(--dark);
-		max-height: calc(var(--app-height) - 5em);
+		max-height: calc(100vh - 5em);
 		padding: 1em;
 	}
 
@@ -101,6 +113,7 @@
 			'search'
 			'results';
 		grid-area: left;
+		max-width: calc(calc(100vw - 5em) / 2);
 	}
 
 	.search {

@@ -20,12 +20,12 @@
 		background-color: var(--light);
 		overflow-y: scroll;
 		scrollbar-width: none;
-		max-height: calc(var(--app-height) - 14em);
+		max-height: calc(100vh - 14em);
 	}
 
 	@media screen and (max-width: 700px) {
 		section.half {
-			max-height: calc(calc(calc(var(--app-height) - 5em) / 2) - 8em);
+			max-height: calc(calc(calc(100vh - 5em) / 2) - 8em);
 		}
 	}
 

@@ -26,7 +26,7 @@ export async function load({ params }) {
 	const tuneName = decodeFromUrl(tuneNameEncoded);
 
 	const findTune = new Promise((resolve) => {
-		const readStream = fs.createReadStream('src/lib/tunesByTitleFixed.json');
+		const readStream = fs.createReadStream('src/lib/tunesByTitle.json');
 		const parseStream = bigJson.createParseStream();
 
 		parseStream.on('data', (tunesByTitle) => {

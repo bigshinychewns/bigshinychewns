@@ -16,18 +16,18 @@
 <style>
 	li {
 		padding: 0.5em;
-		display: grid;
+		display: flex;
 		font-size: 1.25rem;
 	}
 
 	li:not(:first-child) {
 		border-top: 0.1em solid var(--dark);
-		overflow-x: hidden;
-		white-space: nowrap;
 	}
 
 	span {
 		color: var(--darkest);
+		overflow-x: hidden;
+		white-space: nowrap;
 	}
 
 	a {

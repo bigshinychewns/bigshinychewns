@@ -23,5 +23,6 @@
 		color: var(--color, var(--darkest));
 		height: auto;
 		width: 3em;
+		transform: scale(var(--ggs,1));
 	}
 </style>

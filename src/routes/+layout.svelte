@@ -2,25 +2,9 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import IconButton from '$lib/components/IconButton.svelte';
 	import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
-	import { onMount } from 'svelte';
 
 	import '$lib/styles/css-reset.css';
 	import '$lib/styles/fonts.css';
-
-	let height = 0;
-	onMount(() => {
-		const appHeight = () => {
-			const doc = document.documentElement;
-			height = window.innerHeight;
-			console.log(`--app-height: ${window.innerHeight}px`);
-			doc.style.setProperty("-—app-height", `${window.innerHeight}px`);
-		};
-		window.addEventListener("resize", appHeight);
-		appHeight();
-		return () => {
-			window.removeEventListener("resize", appHeight);
-		};
-	});
 </script>
 
 <section class="container">
@@ -32,7 +16,7 @@
 		</div>
 		<div class="logo">
 			<a href="/">
-				<h1>{height}</h1>
+				<h1>Big Shiny Chewns</h1>
 			</a>
 		</div>
 		<div class="menu">
@@ -52,9 +36,12 @@
 		--shadow-size: 1em;
 		--shadow-blur-size: -0.75em;
 		--shadow-color: hsla(0, 0%, 15%, 0.7);
-		--app-height: 100vh;
 
 		font-family: 'Copse';
+	}
+
+	:global(html) {
+		height: -webkit-fill-available;
 	}
 
 	section {
@@ -68,7 +55,8 @@
 			'. main .'
 			'. . .';
 		min-height: inherit;
-		max-height: var(--app-height);
+		max-height: 100vh;
+		max-height: -webkit-fill-available;
 	}
 
 	header {
@@ -112,8 +100,10 @@
 	:global(body > div.root) {
 		display: flex;
 		min-width: 100vw;
-		min-height: var(--app-height);
+		min-height: 100vh;
+		min-height: -webkit-fill-available;
 	}
+
 	:global(body) {
 		background-color: var(--darkest);
 	}

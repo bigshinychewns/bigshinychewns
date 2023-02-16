@@ -22,7 +22,7 @@
 		background-color: var(--light);
 		display: grid;
 		font-size: 1rem;
-		max-height: calc(var(--app-height) - 10.5em);  /* 5em for logo + 6em for searchInput */
+		max-height: calc(100vh - 10.5em);  /* 5em for logo + 6em for searchInput */
 		overflow-y: scroll;
 		scrollbar-width: none;
 	}

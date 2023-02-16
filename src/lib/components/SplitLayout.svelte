@@ -20,13 +20,14 @@
 		border-right: 1em solid var(--darkest);
 		border-left: 1em solid var(--darkest);
 	}
+
   @media screen and (max-width: 700px) {
     section {
       grid-auto-rows: minmax(0, 1fr);
       grid-auto-flow: row;
       row-gap: 1em;
       grid-template-columns: unset;
-      height: calc(var(--app-height) - 9em);
+      height: calc(100vh - 9em);
       min-width: 0;
     }
   }

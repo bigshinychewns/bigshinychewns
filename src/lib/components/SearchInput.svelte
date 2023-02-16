@@ -1,13 +1,25 @@
 <script>
 	import SearchIcon from '$lib/icons/SearchIcon.svelte';
-	import { page } from '$app/stores';
-
-	export let submitted = false;
+	import { searchQuery } from '$lib/util/searchStore';
+	import { browser } from '$app/environment';
+	import IconButton from './IconButton.svelte';
+	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 </script>
 
 <section class="search-input">
-	<form method="GET" action="/" on:submit={() => submitted = true}>
-		<input type="text" name="q" value={$page.url.searchParams.get('q')}/>
+	<form method="GET" action="/">
+		{#if browser}
+			<fieldset>
+				<input type="text" name="q" bind:value={$searchQuery} />
+				{#if $searchQuery.length}
+					<div class="button-container">
+						<IconButton onClick={() => $searchQuery = ''} --height={'2.5em'}>
+							<CloseIcon --ggs={"0.5"} --color={"var(--dark)"}/>
+						</IconButton>
+					</div>
+				{/if}
+			</fieldset>
+		{/if}
 		<button type="submit">
 			<SearchIcon />
 		</button>
@@ -19,11 +31,26 @@
 		height: 2.5em;
 	}
 
+	fieldset {
+		border: none;
+		display: grid;
+		grid-template-columns: 1fr 3em;
+		grid-template-rows: 1fr;
+		gap: 0px 0px;
+		width: 100%;
+	}
+
 	input {
+		grid-area: 1 / 1 / 2 / 3;
 		background-color: var(--light);
 		text-align: center;
-		font-size: 1.5em;
-		width: calc(100% - 1.5em);
+		height: 2.5em;
+	}
+
+	.button-container {
+		grid-area: 1 / 2 / 2 / 3;
+		justify-self: center;
+		align-self: center;
 	}
 
 	form {
