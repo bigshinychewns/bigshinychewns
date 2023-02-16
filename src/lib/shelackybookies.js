@@ -98,5 +98,19 @@ K: Dmaj
 A2 FA d~f3|dfef d~B3| A2 FA dfec|dBAF ADD2:||
 |faab afdf|afef d~B3|fb ~b2 bafa|b2af fee2|
 bf ~f2 afef|afef d~B3|A2 FA dfec |dBAF ADD2:||
+
+X: 1
+T: Morrissey's Favorite
+M: 4/4
+L: 1/8
+R: reel
+K: GMaj
+|:GFGA GED D2 EGD B2 AG|
+A2 AB AGE A2 GAB AGED:|
+GFGA GED D2EGd B2 AG
+A2 AB AGE D2EGA G2F
+|:G2ED B2AG g2fed B2AG
+GED B2AG gfed B2AG
+A2AB AGE D2EGA G2G:|
 `
 }
