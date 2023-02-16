@@ -31,9 +31,9 @@ export async function GET({ url, setHeaders }) {
 		});
 	}
 
-	// setHeaders({
-	// 	'cache-control': 'max-age=86400',
-	// });
+	setHeaders({
+		'cache-control': 'max-age=86400',
+	});
 
 	return json(tuneVersions);
 }
