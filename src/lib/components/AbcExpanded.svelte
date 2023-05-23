@@ -3,149 +3,106 @@
 	import RewindIcon from '$lib/icons/RewindIcon.svelte';
 	import PauseIcon from '$lib/icons/PauseIcon.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
-	import DownArrowIcon from '$lib/icons/DownArrowIcon.svelte';
 	import MinusIcon from '$lib/icons/MinusIcon.svelte';
 	import PlusIcon from '$lib/icons/PlusIcon.svelte';
 	import abcjsCanvas from '$lib/util/abcjsCanvas';
-	import LoopIcon from '$lib/icons/LoopIcon.svelte';
 	import generateAbc from '$lib/util/generateAbc';
 	import '$lib/styles/abcjs.css';
 
 	export let tune;
-	export let showEditor;
+	// export let showEditor;
 
 	$: abc = generateAbc(tune);
 
-	let playing = false;
-	let parsing = true;
-	let looping = false;
-	let playFunc = () => {};
-	let pauseFunc = () => {};
-	let rewindFunc = () => {};
-	let toggleLoopFunc = () => {};
+	let qpm = 100;
 
-	let halfNoteTempo = 80;
-
-	const handlePlay = async () => {
-		playFunc();
-		playing = true;
-	};
-
-	const handlePause = () => {
-		pauseFunc();
-		playing = false;
-	};
-
-	const handleRewind = () => {
-		rewindFunc();
-		playing = false;
-	};
+	let abcFsm;
 
 	const handleEdit = () => {
 		// showEditor = !showEditor;
 	};
 
-	const handleSave = () => {
-		// savedTunes.add(abc);
-	};
-
-	const togglePlayPause = () => (playing ? handlePause() : handlePlay());
+	const handleRewind = () => $abcFsm.send('rewind');
+	const handlePause = () => $abcFsm.send('pause');
+	const handlePlay = () =>
+		$abcFsm.machine.current === 'audioUnactivated'
+			? $abcFsm.send('play')
+			: $abcFsm.send('play');
 
 	const decreaseTempo = async () => {
-		halfNoteTempo = halfNoteTempo - 5;
-		playing = false;
-		looping = false;
-	}
+		qpm = qpm - 5;
+	};
 
 	const increaseTempo = async () => {
-		halfNoteTempo = halfNoteTempo + 5;
-		playing = false;
-		looping = false;
-	}
+		qpm = qpm + 5;
+	};
 
-	const toggleLoop = async () => {
-		toggleLoopFunc();
-		looping = !looping;
-	}
+	const updateFsm = (newFsm) => abcFsm = newFsm;
 
-	const updateControls = ({
-		play: newPlayFunc,
-		pause: newPauseFunc,
-		rewind: newRewindFunc,
-		toggleLoop: newToggleLoop
-	}) => {
-		if (newPlayFunc) {
-			playFunc = newPlayFunc;
-		}
-		if (newPauseFunc) {
-			pauseFunc = newPauseFunc;
-		}
-		if (newRewindFunc) {
-			rewindFunc = newRewindFunc;
-		}
-		if (newToggleLoop) {
-			toggleLoopFunc = newToggleLoop;
-		}
-		parsing = false;
-	}
-</script>
-
-<main class="abc-expanded" class:hide={parsing}>
-	<div
-		id="renderArea"
-		use:abcjsCanvas={{
+	$: canvasParams = {
 			abc,
-			updateControls,
-			halfNoteTempo,
+			updateFsm,
+			qpm,
 			expanded: true,
 			controlsSelector: '.fake-controls'
-		}}
+		};
+</script>
+
+<main class="abc-expanded" class:hide={!abcFsm}>
+	<div
+		id="renderArea"
+		use:abcjsCanvas={canvasParams}
 	>
 	</div>
 	<div class="controls">
 		<div class="fake-controls hide" />
-		<div class="edit-abc-container">
-			<IconButton onClick={handleEdit}>
-				<span class="abc-button">Abc</span>
-			</IconButton>
-		</div>
-		<div class="rewind-container">
-			<IconButton onClick={handleRewind}>
-				<RewindIcon />
-			</IconButton>
-		</div>
-		<div class="play-pause-container">
-			<IconButton onClick={togglePlayPause}>
-				{#if playing}
-					<PauseIcon />
+		{#if !!abcFsm}
+			<div>{$abcFsm.machine.current}</div>
+			<div class="edit-abc-container">
+				<IconButton onClick={handleEdit}>
+					<span class="abc-button">Abc</span>
+				</IconButton>
+			</div>
+			<div class="rewind-container">
+				<IconButton onClick={handleRewind}>
+					<RewindIcon />
+				</IconButton>
+			</div>
+			<div class="play-pause-container">
+				{#if $abcFsm?.machine?.current === 'audioPlaying'}
+					<IconButton onClick={handlePause}>
+						<PauseIcon />
+					</IconButton>
 				{:else}
-					<PlayIcon />
+					<IconButton onClick={handlePlay}>
+						<PlayIcon />
+					</IconButton>
 				{/if}
-			</IconButton>
-		</div>
-		<div class="decrease-tempo-container">
-			<IconButton onClick={decreaseTempo}>
-				<MinusIcon />
-			</IconButton>
-		</div>
-		<div class="current-tempo-container">
-			{halfNoteTempo}
-		</div>
-		<div class="increase-tempo-container">
-			<IconButton onClick={increaseTempo}>
-				<PlusIcon />
-			</IconButton>
-		</div>
-		<div class="toggle-loop-container">
-			<IconButton onClick={toggleLoop}>
-				<LoopIcon --color={looping ? 'red' : null}/>
-			</IconButton>
-		</div>
-		<div class="save-icon-container">
-			<IconButton onClick={handleSave}>
-				<DownArrowIcon />
-			</IconButton>
-		</div>
+			</div>
+			<div class="decrease-tempo-container">
+				<IconButton onClick={decreaseTempo}>
+					<MinusIcon />
+				</IconButton>
+			</div>
+			<div class="current-tempo-container">
+				{qpm}
+			</div>
+			<div class="increase-tempo-container">
+				<IconButton onClick={increaseTempo}>
+					<PlusIcon />
+				</IconButton>
+			</div>
+			<!-- <div class="toggle-loop-container">
+				<IconButton onClick={toggleLoop}>
+					<LoopIcon --color={looping ? 'red' : null}/>
+				</IconButton>
+			</div>
+			<div class="save-icon-container">
+				<IconButton onClick={handleSave}>
+					<DownArrowIcon />
+				</IconButton>
+			</div> -->
+		{/if}
 	</div>
 </main>
 
@@ -163,16 +120,13 @@
 		color: var(--lightest);
 		overflow-y: scroll;
 		scrollbar-width: none;
+		scroll-behavior: smooth;
 	}
 
 	#renderArea :global(.highlight) {
 		--highlight-color: red;
 		color: var(--highlight-color);
 		filter: drop-shadow(0px 0px 3px var(--highlight-color));
-	}
-
-	#renderArea :global(g) {
-		transition: color 200ms linear, filter 200ms linear;
 	}
 
 	.controls {

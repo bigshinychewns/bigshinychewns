@@ -2,6 +2,7 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import IconButton from '$lib/components/IconButton.svelte';
 	import ChevronLeftIcon from '$lib/icons/ChevronLeftIcon.svelte';
+	import { networkIsActive } from '$lib/util/tunesStore';
 
 	import '$lib/styles/css-reset.css';
 	import '$lib/styles/fonts.css';
@@ -16,7 +17,7 @@
 		</div>
 		<div class="logo">
 			<a href="/">
-				<h1>Big Shiny Chewns</h1>
+				<h1 class:dazzling={$networkIsActive}>Big Shiny Chewns</h1>
 			</a>
 		</div>
 		<div class="menu">
@@ -79,9 +80,79 @@
 		color: var(--darkest);
 		padding-bottom: 0.25em;
 		-webkit-text-stroke: 0.02em var(--light);
-		text-shadow: 0.03125em 0.03125em 0 var(--darkest), 0.0625em 0.0625em 0 var(--dark),
-			0.09375em 0.09375em 0 var(--medium), 0.125em 0.125em 0 var(--light),
+		text-shadow:
+			0.03125em 0.03125em 0 var(--darkest),
+			0.0625em 0.0625em 0 var(--dark),
+			0.09375em 0.09375em 0 var(--medium),
+			0.125em 0.125em 0 var(--light),
 			0.15625em 0.15625em 0 var(--lightest);
+	}
+
+	h1.dazzling {
+		animation: dazzler 1s linear infinite, throbber 1s linear infinite;
+	}
+
+	@keyframes throbber {
+		0% {
+			color: var(--dark);
+		}
+		50% {
+			color: var(--darkest);
+		}
+		100% {
+			color: var(--dark);
+		}
+	}
+
+	@keyframes dazzler {
+		0% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--darkest),
+				0.0625em 0.0625em 0 var(--dark),
+				0.09375em 0.09375em 0 var(--medium),
+				0.125em 0.125em 0 var(--light),
+				0.15625em 0.15625em 0 var(--lightest);
+		}
+		20% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--lightest),
+				0.0625em 0.0625em 0 var(--darkest),
+				0.09375em 0.09375em 0 var(--dark),
+				0.125em 0.125em 0 var(--medium),
+				0.15625em 0.15625em 0 var(--light);
+		}
+		40% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--light),
+				0.0625em 0.0625em 0 var(--lightest),
+				0.09375em 0.09375em 0 var(--darkest),
+				0.125em 0.125em 0 var(--dark),
+				0.15625em 0.15625em 0 var(--medium);
+		}
+		60% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--medium),
+				0.0625em 0.0625em 0 var(--light),
+				0.09375em 0.09375em 0 var(--lightest),
+				0.125em 0.125em 0 var(--darkest),
+				0.15625em 0.15625em 0 var(--dark);
+		}
+		80% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--dark),
+				0.0625em 0.0625em 0 var(--medium),
+				0.09375em 0.09375em 0 var(--light),
+				0.125em 0.125em 0 var(--lightest),
+				0.15625em 0.15625em 0 var(--darkest);
+		}
+		100% {
+			text-shadow:
+				0.03125em 0.03125em 0 var(--darkest),
+				0.0625em 0.0625em 0 var(--dark),
+				0.09375em 0.09375em 0 var(--medium),
+				0.125em 0.125em 0 var(--light),
+				0.15625em 0.15625em 0 var(--lightest);
+		}
 	}
 
 	.back {
@@ -95,6 +166,7 @@
 	a {
 		color: var(--darkest);
 		text-decoration: none;
+		display: flex;
 	}
 
 	:global(body > div.root) {
@@ -133,10 +205,7 @@
 		}
 	}
 
-	/* @supports(padding:max(0px)) {
-		:global(body) {
-			padding-top: min(0vmin, env(safe-area-inset-top));
-			padding-bottom: min(0vmin, env(safe-area-inset-bottom));
-		}
-	} */
+	:global(body) {
+		height: 100svh;
+	}
 </style>

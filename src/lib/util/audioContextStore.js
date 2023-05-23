@@ -1,4 +1,5 @@
 import { readable } from 'svelte/store';
+import ABCjs from 'abcjs';
 
 const { subscribe } = readable(
   undefined,
@@ -8,11 +9,13 @@ const { subscribe } = readable(
       || navigator.mozAudioContext
       || navigator.msAudioContext;
 
-    const newAudioContext = new window.AudioContext();
+    const newAudioContext =
+      ABCjs.synth.activeAudioContext() || new window.AudioContext();
+
+    newAudioContext.onstatechange = () => {};
+
     set(newAudioContext);
-    return () => {
-      newAudioContext.close();
-    };
+    return () => {};
   }
 );
 

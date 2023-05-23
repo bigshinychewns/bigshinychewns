@@ -12,62 +12,50 @@
 
 	$: abc = generateAbc(tune);
 
-	let playing = false;
-	let parsing = true;
-	let playFunc = () => {};
-	let pauseFunc = () => {};
+	let abcFsm;
 
+	const updateFsm = (newFsm) => {
+		abcFsm = newFsm;
+	};
+	const handlePause = () => {
+		abcFsm.pause();
+	};
 	const handlePlay = () => {
-		playFunc();
-		playing = true;
+		abcFsm.play();
 	};
 
-	const handleStop = () => {
-		pauseFunc();
-		playing = false;
-	};
-
-	const handleClick = () => (playing ? handleStop() : handlePlay());
-
-	const updateControls = ({play: newPlayFunc, pause: newPauseFunc}) => {
-		if (newPlayFunc) {
-			playFunc = newPlayFunc;
-		}
-		if (newPauseFunc) {
-			pauseFunc = newPauseFunc;
-		}
-		parsing = false;
-	}
+	$: console.log('abcFsm: ', $abcFsm);
 </script>
 
-<div class="preview" class:parsing>
+<div class="preview" class:parsing={abcFsm === undefined}>
 	<div
 		id="render-area"
-		use:abcjsCanvas={{
-			abc: abc,
-			updateControls: updateControls,
-		}}
+		use:abcjsCanvas={{ abc, updateFsm }}
 	/>
 </div>
 <div class="controls">
-	<div class="play-pause-container">
-		<IconButton onClick={handleClick}>
-			{#if playing}
-				<PauseIcon />
+	{#if !!abcFsm}
+		<div class="play-pause-container">
+			{#if $abcFsm === 'audioPlaying'}
+				<IconButton onClick={handlePause}>
+					<PauseIcon />
+				</IconButton>
 			{:else}
-				<PlayIcon />
+				<IconButton onClick={handlePlay}>
+					<PlayIcon />
+				</IconButton>
 			{/if}
-		</IconButton>
-	</div>
-	<div class="expand-container">
-		<a href={`${$page.url.pathname}/expanded`}>
-			<ArrowsExpandIcon />
-		</a>
-	</div>
+		</div>
+		<div class="expand-container">
+			<a href={`${$page.url.pathname}/expanded`}>
+				<ArrowsExpandIcon />
+			</a>
+		</div>
+		<div>{$abcFsm.machine.current}</div>
+	{/if}
 </div>
 
 <style>
-
 	.preview {
 		grid-area: preview;
 	}

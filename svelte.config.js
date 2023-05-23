@@ -1,6 +1,7 @@
 // import adapter from '@sveltejs/adapter-auto';
 import preprocess from 'svelte-preprocess';
-import node from '@sveltejs/adapter-node';
+// import node from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-vercel';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -9,8 +10,8 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: node(),
-  }
+		adapter: adapter()
+	}
 };
 
 export default config;
