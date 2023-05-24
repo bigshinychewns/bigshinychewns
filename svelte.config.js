@@ -1,9 +1,8 @@
-// import adapter from '@sveltejs/adapter-auto';
-import preprocess from 'svelte-preprocess';
-import node from '@sveltejs/adapter-node';
-// import adapter from '@sveltejs/adapter-vercel';
 
 // --=== VERCEL CONFIG ===--
+// import preprocess from 'svelte-preprocess';
+// import adapter from '@sveltejs/adapter-vercel';
+
 /** @type {import('@sveltejs/kit').Config} */
 // const config = {
 // 	// Consult https://github.com/sveltejs/svelte-preprocess
@@ -18,12 +17,12 @@ import node from '@sveltejs/adapter-node';
 // export default config;
 
 // --=== RENDER CONFIG ===--
-import adapter from '@sveltejs/adapter-auto';
+import node from '@sveltejs/adapter-node';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter()
+		adapter: node()
 	}
 };
 
