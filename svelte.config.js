@@ -17,12 +17,19 @@
 // export default config;
 
 // --=== RENDER CONFIG ===--
-import node from '@sveltejs/adapter-node';
+// import node from '@sveltejs/adapter-node';
+
+
+// Netlify config
+import netlify_adapter from '@sveltejs/adapter-netlify';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: node()
+		adapter: netlify_adapter({
+			// edge: false,
+			// split: true
+		})
 	}
 };
 
