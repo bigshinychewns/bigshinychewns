@@ -52,6 +52,20 @@ export async function GET({ url, setHeaders }) {
 		});
 		console.log('------')
 
+		console.log('--- whats in the .netlify folder?? ---');
+		fs.readdir('/var/task/.netlify', function (err, files) {
+			//handling error
+			if (err) {
+					return console.log('Unable to scan directory: ' + err);
+			}
+			//listing all files using forEach
+			files.forEach(function (file) {
+					// Do whatever you want to do with the file
+					console.log(file);
+			});
+		});
+		console.log('------')
+
 		const readStream = fs.createReadStream(
 			'./src/lib/tunesByTitle.json'
 		);
