@@ -37,6 +37,21 @@ export async function GET({ url, setHeaders }) {
 
 		console.log('path.dirname(__filename):');
 		console.log(__dirname);
+
+		console.log('--- whats in this directory: ---')
+		fs.readdir(__dirname, function (err, files) {
+			//handling error
+			if (err) {
+					return console.log('Unable to scan directory: ' + err);
+			}
+			//listing all files using forEach
+			files.forEach(function (file) {
+					// Do whatever you want to do with the file
+					console.log(file);
+			});
+		});
+		console.log('------')
+
 		const readStream = fs.createReadStream(
 			path.join(__dirname, '..', '..', '..', '..', 'lib', 'tunesByTitle.json')
 		);
