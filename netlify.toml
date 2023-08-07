@@ -3,4 +3,4 @@
   publish = "build"
 
 [functions]
-  included_files = ["src/lib/tunesByTitle.json"]
+  included_files = ["./src/lib/tunesByTitle.json"]

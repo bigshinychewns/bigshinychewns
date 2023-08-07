@@ -39,7 +39,7 @@ export async function GET({ url, setHeaders }) {
 		console.log(__dirname);
 
 		console.log('--- whats in this directory: ---')
-		fs.readdir(path.join(__dirname, '..', '..', '..', '..', '..'), function (err, files) {
+		fs.readdir('./src/lib/tunesByTitle.json', function (err, files) {
 			//handling error
 			if (err) {
 					return console.log('Unable to scan directory: ' + err);
@@ -53,7 +53,7 @@ export async function GET({ url, setHeaders }) {
 		console.log('------')
 
 		const readStream = fs.createReadStream(
-			path.join(__dirname, '..', '..', '..', '..', 'lib', 'tunesByTitle.json')
+			'./src/lib/tunesByTitle.json'
 		);
 
 		// const readStream = fs.createReadStream('src/lib/tunesByTitle.json');

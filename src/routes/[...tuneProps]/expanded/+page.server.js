@@ -49,7 +49,7 @@ export async function load({ params }) {
 		console.log(__dirname);
 
 		console.log('--- whats in this directory: ---')
-		fs.readdir(path.join(__dirname, '..', '..', '..', '..'), function (err, files) {
+		fs.readdir('./src/lib/tunesByTitle.json', function (err, files) {
 			//handling error
 			if (err) {
 					return console.log('Unable to scan directory: ' + err);
@@ -63,7 +63,7 @@ export async function load({ params }) {
 		console.log('------')
 
 		const readStream = fs.createReadStream(
-			path.join(__dirname, '..', '..', '..', 'lib', 'tunesByTitle.json')
+			'./src/lib/tunesByTitle.json'
 		);
 		const parseStream = bigJson.createParseStream();
 
