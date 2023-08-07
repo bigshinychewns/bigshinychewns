@@ -17,9 +17,26 @@ export async function GET({ url, setHeaders }) {
 	}
 
 	const findTune = new Promise((resolve) => {
+		let __path;
+		try {
+			__path = PATH
+		} catch (error) {
+			__path = 'no path'
+		}
+		console.log('PATH:');
+		console.log(__path);
+
+		console.log('import.meta.url:');
+		console.log(import.meta.url);
+
 		const __filename = fileURLToPath(import.meta.url);
+
+		console.log('fileURLToPath(import.meta.url):');
+		console.log(__filename);
 		const __dirname = path.dirname(__filename);
 
+		console.log('path.dirname(__filename):');
+		console.log(__dirname);
 		const readStream = fs.createReadStream(
 			path.join(__dirname, '..', '..', '..', '..', 'lib', 'tunesByTitle.json')
 		);
