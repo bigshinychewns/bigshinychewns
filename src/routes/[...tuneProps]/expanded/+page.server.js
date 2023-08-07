@@ -49,7 +49,7 @@ export async function load({ params }) {
 		console.log(__dirname);
 
 		console.log('--- whats in this directory: ---')
-		fs.readdir(path.join(__dirname, '..', '..', '..'), function (err, files) {
+		fs.readdir(path.join(__dirname, '..', '..', '..', '..'), function (err, files) {
 			//handling error
 			if (err) {
 					return console.log('Unable to scan directory: ' + err);
