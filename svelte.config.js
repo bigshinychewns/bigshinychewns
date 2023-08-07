@@ -27,7 +27,7 @@ import netlify_adapter from '@sveltejs/adapter-netlify';
 const config = {
 	kit: {
 		adapter: netlify_adapter({
-			// edge: false,
+			edge: false,
 			// split: true
 		})
 	}
