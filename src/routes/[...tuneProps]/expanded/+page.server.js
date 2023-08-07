@@ -48,19 +48,19 @@ export async function load({ params }) {
 		console.log('path.dirname(__filename):');
 		console.log(__dirname);
 
-		console.log('--- whats in this directory: ---')
-		fs.readdir('./src/lib/tunesByTitle.json', function (err, files) {
-			//handling error
-			if (err) {
-					return console.log('Unable to scan directory: ' + err);
-			}
-			//listing all files using forEach
-			files.forEach(function (file) {
-					// Do whatever you want to do with the file
-					console.log(file);
-			});
-		});
-		console.log('------')
+		// console.log('--- whats in this directory: ---')
+		// fs.readdir('./src/lib', function (err, files) {
+		// 	//handling error
+		// 	if (err) {
+		// 			return console.log('Unable to scan directory: ' + err);
+		// 	}
+		// 	//listing all files using forEach
+		// 	files.forEach(function (file) {
+		// 			// Do whatever you want to do with the file
+		// 			console.log(file);
+		// 	});
+		// });
+		// console.log('------')
 
 		console.log('--- whats in the .netlify folder?? ---');
 		fs.readdir('/var/task/.netlify', function (err, files) {
