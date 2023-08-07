@@ -2,6 +2,7 @@ import { json, error } from '@sveltejs/kit';
 import bigJson from 'big-json';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { decodeFromUrl } from '$lib/util/urlParams';
 
 /** @type {import('./$types').RequestHandler} */
@@ -16,6 +17,9 @@ export async function GET({ url, setHeaders }) {
 	}
 
 	const findTune = new Promise((resolve) => {
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = path.dirname(__filename);
+
 		const readStream = fs.createReadStream(
 			path.join(__dirname, '..', '..', '..', '..', 'lib', 'tunesByTitle.json')
 		);

@@ -3,6 +3,7 @@ import { error } from '@sveltejs/kit';
 import bigJson from 'big-json';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -27,6 +28,9 @@ export async function load({ params }) {
 	const tuneName = decodeFromUrl(tuneNameEncoded);
 
 	const findTune = new Promise((resolve) => {
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = path.dirname(__filename);
+
 		const readStream = fs.createReadStream(
 			path.join(__dirname, '..', '..', '..', 'lib', 'tunesByTitle.json')
 		);
