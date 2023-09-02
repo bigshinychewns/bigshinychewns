@@ -241,14 +241,26 @@ export default function abcjsCanvas (element, options) {
 	};
 
 	const visuallyRenderAbc = async (element, { abc, expanded, qpm }) => {
+		// const positionInfo = element.parentNode.getBoundingClientRect();
+		// const elementWidth = Math.round(positionInfo.width)
+		// console.log('element:', positionInfo);
+
 		/** @type {ABCjs.AbcVisualParams} */
-		let abcRenderOptions = { responsive: 'resize' };
+		let abcRenderOptions = {
+			responsive: 'resize',
+			// staffwidth: window.innerWidth,
+			// wrap: {
+			// 	minSpacing: 1.8,
+			// 	maxSpacing: 2.7,
+			// 	preferredMeasuresPerLine: 4
+			// }
+		};
 		if (expanded) {
 			/** @ts-ignore : looks like ABCjs doesn't have .tablature in types */
 			abcRenderOptions.tablature = [{ instrument: 'violin' }];
 			abcRenderOptions.add_classes = true;
 		}
-
+		console.log('abcRenderOptions:', abcRenderOptions);
 		let abcWithTempo = abc;
 		if (abc.indexOf('Q:') === -1) {
 			abcWithTempo = abc.replace(
